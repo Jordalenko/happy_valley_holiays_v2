@@ -1,1 +1,1 @@
-web: gunicorn happyvalleyholidays.wsgi
+web: gunicorn happy_valley_holidays.wsgi
