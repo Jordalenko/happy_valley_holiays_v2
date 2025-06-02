@@ -1,5 +1,5 @@
 """
-WSGI config for happy_valley_Holidays project.
+WSGI config for happy_valley_holidays project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
