@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'happy_valley_Holidays.urls'
+ROOT_URLCONF = 'happy_valley_holidays.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'happy_valley_Holidays.wsgi.application'
+WSGI_APPLICATION = 'happy_valley_holidays.wsgi.application'
 
 
 # Database
