@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'cottages',
     'guest_profile',
+    'bookings',
 ]
 
 MIDDLEWARE = [
