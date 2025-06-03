@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
+from cloudinary.models import CloudinaryField
 
 STATUS = ((0, "Draft"), (1, "Published"))
 
@@ -13,6 +14,7 @@ class Cottage(models.Model):
         max_length=20,
         default="Pen Y Graig"
     )
+    featured_image = CloudinaryField('image', default='placeholder')
     description = models.CharField(max_length=200, blank=True, null=True, default="Untitled Cottage")
     bedrooms = models.IntegerField()
     bathrooms = models.IntegerField()
@@ -29,6 +31,7 @@ class Review(models.Model):
     cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE)
     title = models.CharField(max_length=120, default="Untitled Review")
     comment = models.TextField(blank=True, null=True)
+    featured_image = CloudinaryField('image', default='placeholder')
     rating = models.IntegerField(default=5, choices=[(i, str(i)) for i in range(1, 6)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
