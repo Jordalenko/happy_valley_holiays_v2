@@ -1,8 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-
-# Create your views here.
+from .models import About
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the about index.")
+def about_me(request):
+    """
+    Renders the About page
+    """
+    about = About.objects.all().order_by('-updated_on').first()
+
+    return render(
+        request,
+        "about/about.html",
+        {"about": about},
+    )
