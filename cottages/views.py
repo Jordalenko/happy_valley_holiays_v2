@@ -1,11 +1,12 @@
+from django.shortcuts import render, get_object_or_404, reverse
 from django.views import generic
 from django.views.generic import TemplateView
-from django.shortcuts import render, get_object_or_404, reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from .models import Cottage, Review, Comment
 from .forms import CommentForm
 
+# Create your views here.
 class HomePageView(TemplateView):
     template_name = "cottages/index.html"
 
@@ -58,20 +59,20 @@ def review_detail(request, slug):
     )
 
 
-def review_edit(request, slug, review_id):
+def comment_edit(request, slug, comment_id):
     """
-    view to edit reviews
+    view to edit comment
     """
     if request.method == "POST":
 
-        queryset = Review.objects.filter(status=1)
-        review = get_object_or_404(queryset, slug=slug)
-        review = get_object_or_404(Review, pk=review_id)
+        queryset = Comment.objects.filter(status=1)
+        comment = get_object_or_404(queryset, slug=slug)
+        comment = get_object_or_404(Comment, pk=comment_id)
         comment_form = CommentForm(data=request.POST, instance=comment)
 
         if comment_form.is_valid() and comment.author == request.user:
             comment = comment_form.save(commit=False)
-            comment.review = review
+            comment = comment
             comment.approved = False
             comment.save()
             messages.add_message(request, messages.SUCCESS, 'Review Updated!')
@@ -81,18 +82,18 @@ def review_edit(request, slug, review_id):
     return HttpResponseRedirect(reverse('review_detail', args=[slug]))
 
 
-def comment_delete(request, slug, review_id):
+def comment_delete(request, slug, comment_id):
     """
-    view to delete review
+    view to delete comments
     """
-    queryset = Review.objects.filter(status=1)
-    review = get_object_or_404(queryset, slug=slug)
-    review = get_object_or_404(Review, pk=review_id)
+    queryset = comment.objects.filter(status=1)
+    post = get_object_or_404(queryset, slug=slug)
+    comment = get_object_or_404(Review, pk=comment_id)
 
-    if review.author == request.user:
-        review.delete()
-        messages.add_message(request, messages.SUCCESS, 'Review deleted!')
+    if comment.author == request.user:
+        comment.delete()
+        messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
-        messages.add_message(request, messages.ERROR, 'You can only delete your own reviews!')
+        messages.add_message(request, messages.ERROR, 'You can only delete your own comment!')
 
-    return HttpResponseRedirect(reverse('review_detail', args=[slug]))
+    return HttpResponseRedirect(reverse('comment_detail', args=[slug]))

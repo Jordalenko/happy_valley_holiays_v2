@@ -6,8 +6,6 @@ from cloudinary.models import CloudinaryField
 STATUS = ((0, "Draft"), (1, "Published"))
 
 # Create your models here.
-
-
 class Cottage(models.Model):
     cottage_id = models.CharField(
         primary_key=True,
@@ -48,3 +46,19 @@ class Review(models.Model):
 
     class Meta:
         unique_together = ('guest', 'cottage')
+
+
+class Comment(models.Model):
+    reservation = models.ForeignKey(
+        Reservation, on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="commenter")
+    body = models.TextField()
+    approved = models.BooleanField(default=False)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["created_on"]
+
+    def __str__(self):
+        return f"Comment {self.body} by {self.author}"
