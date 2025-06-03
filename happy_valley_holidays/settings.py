@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'cottages',
     'guest_profile',
     'bookings',
+    'about',
 ]
 
 MIDDLEWARE = [
