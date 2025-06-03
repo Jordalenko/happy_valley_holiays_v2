@@ -8,7 +8,7 @@ class ReviewAdmin(SummernoteModelAdmin):
 
     list_display = ('review_id', 'cottage', 'guest', 'status', 'created_at')
     search_fields = ['cottage__cottage_id', 'guest__username', 'comment']
-    list_filter = ('status',)
+    list_filter = ('status', 'created_at')
     # prepopulated_fields = {'slug': ('title',)}
     summernote_fields = ('comment',)
 
