@@ -19,11 +19,11 @@
                                 </div>
                             </div>
                             <a href="#" class="post-link">
-                                <!-- <h2 class="card-title">{{ post.title }}</h2> -->
+                                <h2 class="card-title">{{ cottage.cottage_id }}</h2>
                             </a>
 
                             <hr />
-                            <!-- <p class="card-text text-muted h6">{{ post.created_on}} -->
+                            <p class="card-text text-muted h6">{{ cottage.description|truncatewords:200 }}
                             </p>
                         </div>
                     </div>
@@ -52,10 +52,11 @@
                                 </div>
                             </div>
                             <a href="{% url 'review_detail' review.slug %}" class="post-link">
-                                <!-- <h2 class="card-title">{{ post.title }}</h2> -->
+                                <h2 class="card-title">{{ review.title }}</h2>
                             </a>
 
                             <hr />
+                            <p class="card-text">Rating: {{ review.rating }}/5</p>
                             <p class="card-text text-muted h6">{{ review.created_at}}
                             </p>
                         </div>

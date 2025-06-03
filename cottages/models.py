@@ -13,6 +13,7 @@ class Cottage(models.Model):
         max_length=20,
         default="Pen Y Graig"
     )
+    description = models.CharField(max_length=200, blank=True, null=True, default="Untitled Cottage")
     bedrooms = models.IntegerField()
     bathrooms = models.IntegerField()
     max_guests = models.IntegerField()
@@ -28,6 +29,7 @@ class Review(models.Model):
     cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE)
     title = models.CharField(max_length=120, default="Untitled Review")
     comment = models.TextField(blank=True, null=True)
+    rating = models.IntegerField(default=5, choices=[(i, str(i)) for i in range(1, 6)])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     status = models.IntegerField(choices=STATUS, default=0)
