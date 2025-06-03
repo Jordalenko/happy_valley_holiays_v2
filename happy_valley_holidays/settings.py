@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'guest_profile',
     'bookings',
     'about',
+    'django_summernote',
 ]
 
 MIDDLEWARE = [
