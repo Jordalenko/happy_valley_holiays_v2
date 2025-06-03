@@ -32,6 +32,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '.herokuapp.com',
+    'happy-valley-holidays.herokuapp.com',
     '127.0.0.0',
     '127.0.0.1',
 ]
