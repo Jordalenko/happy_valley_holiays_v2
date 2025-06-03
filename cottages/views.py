@@ -52,10 +52,12 @@ def review_detail(request, slug):
     return render(
         request,
         "cottages/review_detail.html",
-        {"review": review},
-        "comments": comments,
-        "comment_count": comment_count,
-        "comment_form": comment_form,
+        {
+            "review": review,
+            "comments": comments,
+            "comment_count": comment_count,
+            "comment_form": comment_form,
+        }
     )
 
 

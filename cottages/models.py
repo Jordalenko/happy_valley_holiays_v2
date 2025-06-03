@@ -49,8 +49,7 @@ class Review(models.Model):
 
 
 class Comment(models.Model):
-    reservation = models.ForeignKey(
-        Reservation, on_delete=models.CASCADE, related_name="comments")
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="commenter")
     body = models.TextField()
