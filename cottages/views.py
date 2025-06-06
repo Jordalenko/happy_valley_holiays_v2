@@ -3,7 +3,7 @@ from django.views import generic
 from django.views.generic import TemplateView
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from .models import Cottage, Review, Comment
+from .models import Cottage, Review
 from .forms import CommentForm
 
 # Create your views here.
@@ -67,9 +67,9 @@ def comment_edit(request, slug, comment_id):
     """
     if request.method == "POST":
 
-        queryset = Comment.objects.filter(status=1)
+        queryset = Review.objects.filter(status=1)
         comment = get_object_or_404(queryset, slug=slug)
-        comment = get_object_or_404(Comment, pk=comment_id)
+        comment = get_object_or_404(Review, pk=comment_id)
         comment_form = CommentForm(data=request.POST, instance=comment)
 
         if comment_form.is_valid() and comment.author == request.user:
@@ -88,12 +88,12 @@ def comment_delete(request, slug, comment_id):
     """
     view to delete comments
     """
-    queryset = comment.objects.filter(status=1)
+    queryset = review.objects.filter(status=1)
     post = get_object_or_404(queryset, slug=slug)
-    comment = get_object_or_404(Review, pk=comment_id)
+    review = get_object_or_404(Review, pk=comment_id)
 
-    if comment.author == request.user:
-        comment.delete()
+    if review.author == request.user:
+        review.delete()
         messages.add_message(request, messages.SUCCESS, 'Comment deleted!')
     else:
         messages.add_message(request, messages.ERROR, 'You can only delete your own comment!')
