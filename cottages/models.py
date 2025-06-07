@@ -33,6 +33,12 @@ class Cottage(models.Model):
     @property
     def pretty_name(self):
         return self.slug.replace('-', ' ').title()
+    def image_url(self):
+        if self.cloudinary_url:
+            return self.cloudinary_url
+        elif self.image:
+            return self.image.url
+        return ''
 
     def __str__(self):
         return f"{self.cottage_id} Cottage"
@@ -47,6 +53,13 @@ def unique_slugify(instance, slug_field, slug_source):
             break
         unique_slug = f"{slug}-{i}"
     setattr(instance, slug_field, unique_slug)
+
+
+class CottageImage(models.Model):
+    cottage = models.ForeignKey(Cottage, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='cottages/')
+    caption = models.CharField(max_length=255, blank=True)
+    import_batch_id = models.CharField(max_length=100, blank=True, null=True)
 
 
 class Review(models.Model):

@@ -25,21 +25,46 @@
     </div>
     <!-- Cottage Details Card -->
     <div class="card mb-4">
-        {% if "placeholder" in cottage.featured_image.url %}
+        <!-- {% if "placeholder" in cottage.featured_image.url %}
         <img id="review-hero-image" class="card-img-top" src="{% static 'images/default.jpg' %}"
           alt="placeholder image">
         {% else %}
         <img id="review-hero-image" class="card-img-top" src=" {{ cottage.featured_image.url }}"
           alt="{{ cottage.title }}">
-        {% endif %}
+        {% endif %} -->
+        <div id="cottageCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {% for img in images %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ img.image.url }}" class="d-block w-100" alt="{{ img.caption|default:cottage.pretty_name }}">
+                {% if img.caption %}
+                <div class="carousel-caption d-none d-md-block">
+                  <p>{{ img.caption }}</p>
+                </div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+
+          <button class="carousel-control-prev" type="button" data-bs-target="#cottageCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#cottageCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
         <div class="card-body">
             <h2 class="card-title" id="description">{{ cottage.id }}</h2>
             <p class="card-text">{{ cottage.description }}</p>
             <hr>
             <h4 id="features">Features</h4>
+              <p>A nights stay in this cottage will restore the soul's balance and set you on your way with a wind in your sails.</p>
             <ul>
-                {% if cottage.feature_1 %}<li>{{ cottage.feature_1 }}</li>{% endif %}
-                {% if cottage.feature_2 %}<li>{{ cottage.feature_2 }}</li>{% endif %}
+                {% if cottage.bedrooms %}<li>Bedrooms: {{ cottage.bedrooms }} Bathrooms: {{ cottage.bathrooms }}</li>{% endif %}
+                {% if cottage.price_per_night %}<li>Price per night: £{{ cottage.price_per_night }}</li>{% endif %}
                 <!-- Add more as needed -->
             </ul>
 

@@ -24,6 +24,7 @@ class HomePageView(TemplateView):
 
 def cottage_detail(request, slug):
     cottage = get_object_or_404(Cottage, slug=slug)
+    images = cottage.images.all()
     cottages = Cottage.objects.all()
     reviews = cottage.reviews.all().order_by("-created_on")
     review_count = cottage.reviews.filter(approved=True).count()
@@ -43,6 +44,7 @@ def cottage_detail(request, slug):
     return render(request, 'cottages/cottage_detail.html', {
             'cottage': cottage,
             'cottages': cottages,
+            'images': images,
             "reviews": reviews,
             "review_count": review_count,
             "review_form": comment_form,
