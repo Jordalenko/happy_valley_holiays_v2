@@ -3,22 +3,49 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
-<div class="masthead">
-    <div class="container">
-        <div class="row g-0">
-            <div class="col-md-6 masthead-text">
-                <!-- Review title goes in these h1 tags -->
-                <h1 class="post-title">{{ review.title }}</h1>
-                <!-- Review author goes before the | the review's created date goes after -->
-                <p class="post-subtitle">{{ review.guest }} | {{ review.created_on }}</p>
-            </div>
-            <div class="d-none d-md-block col-md-6 masthead-image">
-                {% if "placeholder" in review.featured_image.url %}
-                <img src="{% static 'images/default.jpg' %}" class="scale" alt="placeholder">
-                {% else %}
-                <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
-                {% endif %}
-            </div>
+<div class="container">
+
+  <!-- Pulldown menu -->
+    <div class="d-flex justify-content-center mb-4">
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="cottageDropdown"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            {{ cottage.pretty_name }} 
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="cottageDropdown">
+            {% for c in cottages %}
+                <li>
+                    <a class="dropdown-item" href="{% url 'cottage_detail' c.slug %}">
+                      {{ c.pretty_name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <!-- Cottage Details Card -->
+    <div class="card mb-4">
+        {% if "placeholder" in cottage.featured_image.url %}
+        <img id="review-hero-image" class="card-img-top" src="{% static 'images/default.jpg' %}"
+          alt="placeholder image">
+        {% else %}
+        <img id="review-hero-image" class="card-img-top" src=" {{ cottage.featured_image.url }}"
+          alt="{{ cottage.title }}">
+        {% endif %}
+        <div class="card-body">
+            <h2 class="card-title" id="description">{{ cottage.id }}</h2>
+            <p class="card-text">{{ cottage.description }}</p>
+            <hr>
+            <h4 id="features">Features</h4>
+            <ul>
+                {% if cottage.feature_1 %}<li>{{ cottage.feature_1 }}</li>{% endif %}
+                {% if cottage.feature_2 %}<li>{{ cottage.feature_2 }}</li>{% endif %}
+                <!-- Add more as needed -->
+            </ul>
+
+            <hr>
+            <h4 id="booking">Booking Info</h4>
+            <!-- Booking form or call-to-action -->
         </div>
     </div>
 </div>

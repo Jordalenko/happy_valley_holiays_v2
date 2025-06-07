@@ -16,13 +16,18 @@ class HomePageView(TemplateView):
         return context
 
 
+# def cottage_detail(request, slug):
+#     queryset = Cottage.objects.filter(slug=slug)
+#     cottage = get_object_or_404(queryset, slug=slug)
+#     reviews = cottage.reviews.all().order_by("-created_on")
+#     review_count = cottage.reviews.filter(approved=True).count()
+
 def cottage_detail(request, slug):
-    queryset = Cottage.objects.filter(slug=slug)
-    cottage = get_object_or_404(queryset, slug=slug)
+    cottage = get_object_or_404(Cottage, slug=slug)
+    cottages = Cottage.objects.all()
     reviews = cottage.reviews.all().order_by("-created_on")
     review_count = cottage.reviews.filter(approved=True).count()
 
-    
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST, files=request.FILES)
         if comment_form.is_valid():
@@ -35,16 +40,25 @@ def cottage_detail(request, slug):
     else:
         comment_form = CommentForm()
 
-    return render(
-        request,
-        "cottages/cottage_detail.html",
-        {
-            "cottage": cottage,
+    return render(request, 'cottages/cottage_detail.html', {
+            'cottage': cottage,
+            'cottages': cottages,
             "reviews": reviews,
             "review_count": review_count,
             "review_form": comment_form,
         }
     )
+
+    # return render(
+    #     request,
+    #     "cottages/cottage_detail.html",
+    #     {
+    #         "cottage": cottage,
+    #         "reviews": reviews,
+    #         "review_count": review_count,
+    #         "review_form": comment_form,
+    #     }
+
 
 
 def review_edit(request, slug, review_id):

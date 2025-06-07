@@ -29,6 +29,10 @@ class Cottage(models.Model):
     bathrooms = models.IntegerField()
     max_guests = models.IntegerField()
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    @property
+    def pretty_name(self):
+        return self.slug.replace('-', ' ').title()
 
     def __str__(self):
         return f"{self.cottage_id} Cottage"

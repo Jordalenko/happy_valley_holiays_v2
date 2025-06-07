@@ -166,3 +166,10 @@ body {
   display: block;
   margin: 0 auto;
 }
+
+#review-hero-image {
+  max-width: 75%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
