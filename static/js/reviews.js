@@ -1,4 +1,5 @@
 const editButtons = document.getElementsByClassName("btn-edit");
+const titleInput = document.getElementById("id_title");
 const commentText = document.getElementById("id_body");
 const commentForm = document.getElementById("commentForm");
 const submitButton = document.getElementById("submitButton");
@@ -17,11 +18,15 @@ const deleteConfirm = document.getElementById("deleteConfirm");
 */
 for (let button of editButtons) {
     button.addEventListener("click", (e) => {
-    	let commentId = e.target.getAttribute("comment_id");
-    	let commentContent = document.getElementById(`comment${commentId}`).innerText;
-    	commentText.value = commentContent;
+    	let reviewId = e.target.getAttribute("review_id");
+    	let reviewContentEl = document.getElementById(`review${reviewId}`);
+		let reviewContent = reviewContentEl ? reviewContentEl.innerText : "";
+		let reviewContainer = reviewContentEl.parentElement;
+        let reviewTitle = reviewContainer.querySelector("h4")?.innerText || "";
+		if (commentText) commentText.value = reviewContent;
+        if (titleInput) titleInput.value = reviewTitle;
     	submitButton.innerText = "Update";
-    	commentForm.setAttribute("action", `edit_comment/${commentId}`);
+        commentForm.setAttribute("action", `/${slug}/edit_review/${reviewId}`);
   });
 }
 
@@ -37,8 +42,8 @@ for (let button of editButtons) {
 */
 for (let button of deleteButtons) {
 	button.addEventListener("click", (e) => {
-    	let commentId = e.target.getAttribute("comment_id");
-    	deleteConfirm.href = `delete_comment/${commentId}`;
+    	let reviewId = e.target.getAttribute("review_id");
+    	deleteConfirm.href = `delete_review/${reviewId}`;
     	deleteModal.show();
   	});
 }

@@ -7,16 +7,16 @@
     <div class="container">
         <div class="row g-0">
             <div class="col-md-6 masthead-text">
-                <!-- Post title goes in these h1 tags -->
+                <!-- Review title goes in these h1 tags -->
                 <h1 class="post-title">{{ review.title }}</h1>
-                <!-- Post author goes before the | the post's created date goes after -->
-                <p class="post-subtitle">{{ review.guest }} | {{ review.created_at }}</p>
+                <!-- Review author goes before the | the review's created date goes after -->
+                <p class="post-subtitle">{{ review.guest }} | {{ review.created_on }}</p>
             </div>
             <div class="d-none d-md-block col-md-6 masthead-image">
                 {% if "placeholder" in review.featured_image.url %}
-                <img class="card-img-top" src="{% static 'images/default.jpg' %}" alt="placeholder image">
+                <img src="{% static 'images/default.jpg' %}" class="scale" alt="placeholder">
                 {% else %}
-                <img class="card-img-top" src="{{ post.featured_image.url }}" alt="{{ post.title }}">
+                <img class="card-img-top" src="{{ review.featured_image.url }}" alt="{{ review.title }}">
                 {% endif %}
             </div>
         </div>
@@ -27,7 +27,7 @@
     <div class="row">
         <div class="col card mb-4  mt-3 left  top">
             <div class="card-body">
-                <!-- The post content goes inside the card-text. -->
+                <!-- The review content goes inside the card-text. -->
                 <!-- Use the | safe filter inside the template tags -->
                 <p class="card-text">
                     {{ review.comment | safe }}
@@ -35,47 +35,54 @@
             </div>
         </div>
     </div>
-    <!-- Displaying count of comments -->
+    <!-- Displaying count of reviews -->
   <div class="row">
     <div class="col-12">
       <strong class="text-secondary">
-        <i class="far fa-comments"></i> {{ comment_count }}
+        <i class="far fa-comments"></i> {{ review_count }}
       </strong>
     </div>
     <div class="col-12">
       <hr>
     </div>
   </div>
-  <!-- Displaying Comments -->
+  <!-- Displaying Reviews -->
   <div class="row">
     <div class="col-md-8 card mb-4  mt-3 ">
-      <h3>Comments:</h3>
+      <h3>Reviews:</h3>
       <div class="card-body">
         <!-- We want a for loop inside the empty control tags
-          to iterate through each comment in comments -->
-        {% for comment in comments %}
-        <div class="p-2 comments
-          {% if not comment.approved and comment.author == user %}
-          faded{% elif not comment.approved %} d-none{% endif %}">
-          <p class="font-weight-bold">
-            {{ comment.author }}
-            <span class="font-weight-normal">
-              {{ comment.created_on }}
-            </span> wrote:
-          </p>
-          <div id="comment{{ comment.id }}">
-            {{ comment.body | linebreaks }}
-          </div>
-          {% if not comment.approved and comment.author == user %}
-          <p class="approval">
-            This comment is awaiting approval
-          </p>
-          {% endif %}
-          {% if user.is_authenticated and comment.author == user %}
-            <button class="btn btn-delete"
-            comment_id="{{ comment.id }}">Delete</button>
-            <button class="btn btn-edit"
-            comment_id="{{ comment.id }}">Edit</button>
+          to iterate through each review in reviews -->
+        {% for review in reviews %}
+        <div class="p-2 reviews
+        {% if not review.approved and review.guest == user %}
+          faded
+        {% elif not review.approved %}
+          d-none
+        {% endif %}">
+        
+        <p class="font-weight-bold">
+          {{ review.guest }}
+          <span class="font-weight-normal">{{ review.created_on }}</span> wrote:
+        </p>
+
+        <h4>{{ review.title }}</h4>
+
+        {% if review.featured_image %}
+          <img src="{{ review.featured_image.url }}" alt="Review Image" id="review-image" class="img-fluid" />
+        {% endif %}
+
+        <div id="review{{ review.id }}">
+          {{ review.body | linebreaks }}
+        </div>
+
+        {% if not review.approved and review.guest == user %}
+          <p class="approval">This review is awaiting approval</p>
+        {% endif %}
+
+        {% if user.is_authenticated and review.guest == user %}
+          <button class="btn btn-delete" review_id="{{ review.id }}">Delete</button>
+          <button class="btn btn-edit" review_id="{{ review.id }}">Edit</button>
         {% endif %}
         </div>
         <!-- Our for loop ends here -->
@@ -88,9 +95,9 @@
         {% if user.is_authenticated %}
         <h3>Leave a review:</h3>
         <p>Posting as: {{ user.username }}</p>
-        <form id="reviewForm" method="post"
-          style="margin-top: 1.3em;">
-          {{ comment_form | crispy }}
+        <form id="commentForm" method="post" 
+          enctype="multipart/form-data" data-slug="{{ review.slug }}" style="margin-top: 1.3em;">
+          {{ review_form | crispy }}
           {% csrf_token %}
           <button id="submitButton" type="submit"
             class="btn btn-signup btn-lg">Submit</button>
@@ -129,5 +136,5 @@
 {% endblock content %}
 
 {% block extras %}
-<script src="{% static 'js/comments.js' %}"></script>
+<script src="{% static 'js/reviews.js' %}"></script>
 {% endblock %}
