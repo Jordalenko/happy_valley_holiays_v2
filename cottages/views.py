@@ -2,8 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.conf import settings
 from .models import Cottage, Review
 from .forms import CommentForm
+import os
 
 
 # Create your views here.
@@ -11,16 +13,30 @@ class HomePageView(TemplateView):
     template_name = "cottages/index.html"
 
     def get_context_data(self, **kwargs):
+        import os
+        from django.conf import settings
+
         context = super().get_context_data(**kwargs)
         context["cottage_list"] = Cottage.objects.all()
+
+        lake_images = []  # Always define it first
+
+        lake_folder = os.path.join(settings.MEDIA_ROOT, 'hero')
+        if os.path.exists(lake_folder):
+            lake_images = [
+                f"hero/{img}"
+                for img in os.listdir(lake_folder)
+                if img.lower().endswith(('.jpg', '.jpeg', '.png', '.gif'))
+            ]
+
+        # ✅ Now safe to loop over lake_images
+        for img in lake_images:
+            full_path = os.path.join(settings.MEDIA_ROOT, img)
+            print(f"Checking: {full_path} --> Exists: {os.path.exists(full_path)}")
+
+        context["lake_images"] = lake_images
         return context
 
-
-# def cottage_detail(request, slug):
-#     queryset = Cottage.objects.filter(slug=slug)
-#     cottage = get_object_or_404(queryset, slug=slug)
-#     reviews = cottage.reviews.all().order_by("-created_on")
-#     review_count = cottage.reviews.filter(approved=True).count()
 
 def cottage_detail(request, slug):
     cottage = get_object_or_404(Cottage, slug=slug)

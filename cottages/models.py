@@ -19,7 +19,7 @@ class Cottage(models.Model):
     )
     featured_image = CloudinaryField('image', default='placeholder')
     description = models.CharField(
-        max_length=200,
+        max_length=400,
         blank=True,
         null=True,
         default="Untitled Cottage"
@@ -60,6 +60,15 @@ class CottageImage(models.Model):
     image = models.ImageField(upload_to='cottages/')
     caption = models.CharField(max_length=255, blank=True)
     import_batch_id = models.CharField(max_length=100, blank=True, null=True)
+
+
+class HeroImage(models.Model):
+    image = models.ImageField(upload_to='hero/')
+    caption = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.caption or self.image.name
 
 
 class Review(models.Model):

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cottage, Review, CottageImage
+from .models import Cottage, Review, CottageImage, HeroImage
 from django_summernote.admin import SummernoteModelAdmin
 
 
@@ -25,3 +25,4 @@ class ReviewAdmin(admin.ModelAdmin):
 
 
 admin.site.register(CottageImage)
+admin.site.register(HeroImage)
