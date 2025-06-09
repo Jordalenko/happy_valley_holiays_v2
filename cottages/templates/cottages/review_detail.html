@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="container col-12 mt-1 left">
+  {% for slug, reviews in reviews_by_cottage.items %}
+    <div class="row mb-2">
+      <div class="col-12">
+      	<h2 class="text-center text-capitalize my-4">{{ Cottage.cottage_id }} Reviews</h2>
+      </div>
+    </div>
+    <div class="row">
+      {% for review in reviews %}
+      	<div class="col-md-4 mb-2">
+        	<div class="p-2 col-md-4>
+            <p class="font-weight-bold">
+              {{ review.guest }}
+              <span class="font-weight-normal">{{ review.created_on }}</span> wrote:
+            </p>
+
+            <h4>{{ review.title }}</h4>
+
+            {% if review.featured_image %}
+              <img src="{{ review.featured_image.url }}" alt="Review Image" class="img-fluid"/>
+            {% endif %}
+
+            <div id="review{{ review.id }}">
+              {{ review.body | linebreaks }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+    <!-- Add link to paginate this section -->
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        {% if page_obj.has_next %}
+        <li>
+          <a href="?page={{ page_obj.next_page_number }}" class="page-link">
+            NEXT &raquo;</a
+          >
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+  </div>
+  <!-- Creating New Comments -->
+    <div class="col-md-4 card mb-4 mt-3">
+      <div class="card-body">
+        {% if user.is_authenticated %}
+        <h3>Leave a review:</h3>
+        <p>Posting as: {{ user.username }}</p>
+        <form id="commentForm" method="post" 
+          enctype="multipart/form-data" data-slug="{{ review.slug }}" style="margin-top: 1.3em;">
+          {{ review_form | crispy }}
+          {% csrf_token %}
+          <button id="submitButton" type="submit"
+            class="btn btn-signup btn-lg">Submit</button>
+        </form>
+        {% else %}
+        <p>Log in to leave a review</p>
+        {% endif %}
+      </div>
+    </div>
+{% endblock %}

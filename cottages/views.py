@@ -6,6 +6,8 @@ from django.conf import settings
 from .models import Cottage, Review
 from .forms import CommentForm
 import os
+from .forms import ReviewForm
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # Create your views here.
@@ -13,11 +15,25 @@ class HomePageView(TemplateView):
     template_name = "cottages/index.html"
 
     def get_context_data(self, **kwargs):
-        import os
-        from django.conf import settings
 
         context = super().get_context_data(**kwargs)
         context["cottage_list"] = Cottage.objects.all()
+        context["review_list"] = Review.objects.all()
+
+        review_qs = Review.objects.filter(approved=True).order_by('-rating', '-created_at')
+        paginator = Paginator(review_qs, 3)
+
+        page = self.request.GET.get("page")
+        try:
+            page_obj = paginator.page(page)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        context["review_list"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
 
         lake_images = []  # Always define it first
 
@@ -29,12 +45,12 @@ class HomePageView(TemplateView):
                 if img.lower().endswith(('.jpg', '.jpeg', '.png', '.gif'))
             ]
 
-        # ✅ Now safe to loop over lake_images
         for img in lake_images:
             full_path = os.path.join(settings.MEDIA_ROOT, img)
             print(f"Checking: {full_path} --> Exists: {os.path.exists(full_path)}")
 
         context["lake_images"] = lake_images
+        
         return context
 
 
@@ -67,16 +83,35 @@ def cottage_detail(request, slug):
         }
     )
 
-    # return render(
-    #     request,
-    #     "cottages/cottage_detail.html",
-    #     {
-    #         "cottage": cottage,
-    #         "reviews": reviews,
-    #         "review_count": review_count,
-    #         "review_form": comment_form,
-    #     }
 
+def review_detail(request):
+    # Define the cottage slugs you're grouping reviews by
+    cottages = ['rock-terrace', 'pen-y-graig']
+    reviews_by_cottage = {}
+
+    # Get the top 3 reviews for each cottage, ordered by rating and date
+    for cottage_slug in cottages:
+        reviews = Review.objects.filter(
+            cottage__slug=cottage_slug,
+            approved=True
+        ).order_by('-rating', '-created_at')[:3]
+        reviews_by_cottage[cottage_slug] = reviews
+
+    if request.method == "POST":
+        review_form = ReviewForm(request.POST, request.FILES)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.guest = request.user
+            review.save()
+            messages.success(request, 'Review submitted and awaiting approval.')
+            return HttpResponseRedirect(request.path_info)
+    else:
+        review_form = ReviewForm()
+
+    return render(request, 'cottages/review_detail.html', {
+        'reviews_by_cottage': reviews_by_cottage,
+        'review_form': review_form,
+    })
 
 
 def review_edit(request, slug, review_id):

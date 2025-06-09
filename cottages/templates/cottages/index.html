@@ -6,6 +6,9 @@
 <div class="container-fluid" id="review-hero-image">
   <div class="row">
     <div class="card mb-4">
+      <h1 class="card-header text-center">
+        <strong>Lake Fishy Fishy</strong>
+      </h1>
       {% if lake_images %}
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -35,9 +38,12 @@
         </button>
       </div>
       {% endif %}
-      <!-- Cottages Column -->
+      <!-- Cottages -->
       <div class="col-12 mt-3 left">
         <div class="row">
+          <h1 class="card-header text-center">
+              <strong>Cottages</strong>
+          </h1>
           {% for cottage in cottage_list %}
           <div class="col-md-6">
             <div class="card mb-6">
@@ -79,9 +85,12 @@
     </div>
     <div class="row">
       <!-- Reviews Column -->
-      <div class="col-12 mt-3 left">
+      <div class="col-12 mt-3 justify-content-center">
         <div class="row">
-          <!-- {% for review in review_list %} -->
+          <h2 class="text-center">
+            <a href="{% url 'review_detail' %}" class="review-link brand">Reviews</a>
+          </h2>
+          {% for review in review_list %}
           <div class="col-md-4">
             <div class="card mb-4">
               <div class="card-body">
@@ -103,10 +112,6 @@
                     <p class="author">Guest: {{ review.guest }}</p>
                   </div>
                 </div>
-                <a
-                  href="{% url 'review_detail' review.slug %}"
-                  class="post-link"
-                >
                   <h2 class="card-title">{{ review.title }}</h2>
                 </a>
 
@@ -120,32 +125,16 @@
         </div>
         <div class="row">{% endif %} {% endfor %}</div>
       </div>
-      <!-- Creating New Reviews -->
-      <div class="col-md-4 card mb-4 mt-3">
-        <div class="card-body">
-          {% if user.is_authenticated %}
-          <h3>Leave a review:</h3>
-          <p>Posting as: {{ user.username }}</p>
-          {% else %}
-          <p>Log in to leave a review</p>
-          {% endif %}
-        </div>
-      </div>
     </div>
-    {% if is_paginated %}
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center">
-        {% if page_obj.has_next %}
-        <li>
-          <a href="?page={{ page_obj.next_page_number }}" class="page-link">
-            NEXT &raquo;</a
-          >
-        </li>
-        {% endif %}
-      </ul>
-    </nav>
+    {% if is_paginated and page_obj.has_next %}
+      <div class="d-flex justify-content-end mb-2">
+        <a href="?page={{ page_obj.next_page_number }}" class="btn btn-dark btn-lg">
+          Next 3 Reviews
+        </a>
+      </div>
     {% endif %}
   </div>
+</div>
 
   <!-- index.html content ends here -->
   {% endblock %}

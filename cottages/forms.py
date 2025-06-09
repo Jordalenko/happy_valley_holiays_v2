@@ -1,4 +1,4 @@
-from .models import Review
+from .models import Review, Cottage
 from django import forms
 
 
@@ -18,3 +18,15 @@ class CommentForm(forms.ModelForm):
                 'class': 'form-control'
             })
         }
+
+
+class ReviewForm(forms.ModelForm):
+    cottage = forms.ModelChoiceField(
+        queryset=Cottage.objects.all(),
+        empty_label="Select Cottage",
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    class Meta:
+        model = Review
+        fields = ['title', 'body', 'rating', 'featured_image', 'cottage']

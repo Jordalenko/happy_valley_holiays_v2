@@ -173,3 +173,10 @@ body {
   display: block;
   margin: 0 auto;
 }
+
+#review-page-image {
+  max-width: 30%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
