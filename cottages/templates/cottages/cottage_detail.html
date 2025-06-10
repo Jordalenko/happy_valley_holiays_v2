@@ -98,7 +98,7 @@
       <div class="card-body">
         <!-- We want a for loop inside the empty control tags
           to iterate through each review in reviews -->
-        {% for review in reviews %}
+        {% for review in page_obj %}
         <div class="p-2 reviews
         {% if not review.approved and review.guest == user %}
           faded
@@ -130,6 +130,24 @@
           <button class="btn btn-edit" review_id="{{ review.id }}">Edit</button>
         {% endif %}
         </div>
+        <!-- Review pagination -->
+        {% if is_paginated %}
+          <div class="d-flex justify-content-between my-4">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark btn-lg">
+                &laquo; Previous Review
+              </a>
+            {% else %}
+              <span></span>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}" class="btn btn-dark btn-lg">
+                Next Review &raquo;
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
         <!-- Our for loop ends here -->
         {% endfor %}
       </div>

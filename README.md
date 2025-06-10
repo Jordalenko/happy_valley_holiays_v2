@@ -48,7 +48,6 @@ Introdctory description of site.
     -   [Delete Profile Confirmation](#delete-profile-confirmation)
     -   [We are sorry to see you go](#we-are-sorry-to-see-you-go)
     -   [Password reset](#password-reset)
-    -   [Password reset email sent](#password-reset-email-sent)
     -   [Enter a new password](#enter-a-new-password)
     -   [Password Reset Completed](#password-reset-completed)
     -   [Error Pages](#error-pages)

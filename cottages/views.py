@@ -58,9 +58,28 @@ def cottage_detail(request, slug):
     cottage = get_object_or_404(Cottage, slug=slug)
     images = cottage.images.all()
     cottages = Cottage.objects.all()
-    reviews = cottage.reviews.all().order_by("-created_on")
-    review_count = cottage.reviews.filter(approved=True).count()
 
+    review_qs = Review.objects.filter(approved=True).order_by('-rating', '-created_at')
+    paginator = Paginator(review_qs, 3)
+
+    page = self.request.GET.get("page")
+    try:
+        page_obj = paginator.page(page)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+
+    # Filter and order reviews
+    reviews_qs = cottage.reviews.filter(approved=True).order_by("-created_on")
+    review_count = reviews_qs.count()
+
+    # Set up pagination
+    paginator = Paginator(reviews_qs, 1)
+    page = request.GET.get("page")
+    page_obj = paginator.get_page(page)
+
+    # Handle comment form
     if request.method == "POST":
         comment_form = CommentForm(data=request.POST, files=request.FILES)
         if comment_form.is_valid():
@@ -73,29 +92,31 @@ def cottage_detail(request, slug):
     else:
         comment_form = CommentForm()
 
-    return render(request, 'cottages/cottage_detail.html', {
-            'cottage': cottage,
-            'cottages': cottages,
-            'images': images,
-            "reviews": reviews,
-            "review_count": review_count,
-            "review_form": comment_form,
-        }
-    )
+    context = {
+        'cottage': cottage,
+        'cottages': cottages,
+        'images': images,
+        'reviews': page_obj,
+        'page_obj': page_obj,
+        'is_paginated': page_obj.has_other_pages(),
+        'review_count': review_count,
+        'review_form': comment_form,
+    }
+
+    return render(request, 'cottages/cottage_detail.html', context)
 
 
 def review_detail(request):
-    # Define the cottage slugs you're grouping reviews by
     cottages = ['rock-terrace', 'pen-y-graig']
-    reviews_by_cottage = {}
+    paginated_reviews_by_cottage = {}
 
-    # Get the top 3 reviews for each cottage, ordered by rating and date
-    for cottage_slug in cottages:
-        reviews = Review.objects.filter(
-            cottage__slug=cottage_slug,
-            approved=True
-        ).order_by('-rating', '-created_at')[:3]
-        reviews_by_cottage[cottage_slug] = reviews
+    for slug in cottages:
+        cottage = get_object_or_404(Cottage, slug=slug)
+        reviews_qs = Review.objects.filter(cottage=cottage, approved=True).order_by('-rating', '-created_at')
+        paginator = Paginator(reviews_qs, 3)
+        page_number = request.GET.get(f'page_{slug}')
+        page_obj = paginator.get_page(page_number)
+        paginated_reviews_by_cottage[cottage] = page_obj
 
     if request.method == "POST":
         review_form = ReviewForm(request.POST, request.FILES)
@@ -109,7 +130,7 @@ def review_detail(request):
         review_form = ReviewForm()
 
     return render(request, 'cottages/review_detail.html', {
-        'reviews_by_cottage': reviews_by_cottage,
+        'paginated_reviews_by_cottage': paginated_reviews_by_cottage,
         'review_form': review_form,
     })
 
