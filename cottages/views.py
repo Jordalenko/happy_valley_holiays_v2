@@ -62,13 +62,13 @@ def cottage_detail(request, slug):
     review_qs = Review.objects.filter(approved=True).order_by('-rating', '-created_at')
     paginator = Paginator(review_qs, 3)
 
-    page = self.request.GET.get("page")
-    try:
-        page_obj = paginator.page(page)
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
+    # page = self.request.GET.get("page")
+    # try:
+    #     page_obj = paginator.page(page)
+    # except PageNotAnInteger:
+    #     page_obj = paginator.page(1)
+    # except EmptyPage:
+    #     page_obj = paginator.page(paginator.num_pages)
 
     # Filter and order reviews
     reviews_qs = cottage.reviews.filter(approved=True).order_by("-created_on")
