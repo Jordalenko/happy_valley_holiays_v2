@@ -95,12 +95,13 @@ class Review(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)
-        super().save(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            unique_slugify(self, 'slug', self.title)
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            while Review.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
         super().save(*args, **kwargs)
 
     def __str__(self):

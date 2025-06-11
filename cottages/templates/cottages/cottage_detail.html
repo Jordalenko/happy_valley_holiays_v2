@@ -49,7 +49,6 @@
             <span class="visually-hidden">Next</span>
           </button>
         </div>
-
         <div class="card-body">
             <h2 class="card-title" id="description">{{ cottage.id }}</h2>
             <p class="card-text">{{ cottage.description }}</p>
@@ -58,28 +57,16 @@
             <ul>
                 {% if cottage.bedrooms %}<li>Bedrooms: {{ cottage.bedrooms }} Bathrooms: {{ cottage.bathrooms }}</li>{% endif %}
                 {% if cottage.price_per_night %}<li>Price per night: £{{ cottage.price_per_night }}</li>{% endif %}
-                <!-- Add more as needed -->
             </ul>
-
             <hr>
             <h4 id="booking">Booking Info</h4>
-            <!-- Booking form or call-to-action -->
+            <!-- Booking form -->
         </div>
     </div>
 </div>
 
 <div class="container">
-    <div class="row">
-        <div class="col card mb-4  mt-3 left  top">
-            <div class="card-body">
-                <!-- The review content goes inside the card-text. -->
-                <!-- Use the | safe filter inside the template tags -->
-                <p class="card-text">
-                    {{ review.comment | safe }}
-                </p>
-            </div>
-        </div>
-    </div>
+    
     <!-- Displaying count of reviews -->
   <div class="row">
     <div class="col-12">
@@ -96,8 +83,6 @@
     <div class="col-md-8 card mb-4  mt-3 ">
       <h3>Reviews:</h3>
       <div class="card-body">
-        <!-- We want a for loop inside the empty control tags
-          to iterate through each review in reviews -->
         {% for review in page_obj %}
         <div class="p-2 reviews
         {% if not review.approved and review.guest == user %}
@@ -117,7 +102,7 @@
           <img src="{{ review.featured_image.url }}" alt="Review Image" id="review-image" class="img-fluid" />
         {% endif %}
 
-        <div id="review{{ review.id }}">
+        <div id="review{{ review.slug }}">
           {{ review.body | linebreaks }}
         </div>
 
@@ -126,10 +111,15 @@
         {% endif %}
 
         {% if user.is_authenticated and review.guest == user %}
-          <button class="btn btn-delete" review_id="{{ review.id }}">Delete</button>
-          <button class="btn btn-edit" review_id="{{ review.id }}">Edit</button>
+            <button class="btn btn-delete" 
+          data-url="{% url 'review_delete' slug=cottage.slug review_slug=review.slug %}">
+            Delete
+          </button>
+          <button class="btn btn-edit" data-review-slug="{{ review.slug }}">Edit</button>
         {% endif %}
         </div>
+        <!-- End of review -->
+        <hr>
         <!-- Review pagination -->
         {% if is_paginated %}
           <div class="d-flex justify-content-between my-4">
@@ -152,14 +142,18 @@
         {% endfor %}
       </div>
     </div>
-    <!-- Creating New Comments -->
+    <!-- Creating New Reviews -->
     <div class="col-md-4 card mb-4 mt-3">
       <div class="card-body">
         {% if user.is_authenticated %}
         <h3>Leave a review:</h3>
         <p>Posting as: {{ user.username }}</p>
-        <form id="commentForm" method="post" 
-          enctype="multipart/form-data" data-slug="{{ review.slug }}" style="margin-top: 1.3em;">
+        <form id="reviewForm"
+        method="post"
+        enctype="multipart/form-data"
+        data-slug="{{ cottage.slug }}"
+        style="margin-top: 1.3em;"
+        >
           {{ review_form | crispy }}
           {% csrf_token %}
           <button id="submitButton" type="submit"
@@ -179,12 +173,12 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title"
-          id="deleteModalLabel">Delete comment?</h5>
+          id="deleteModalLabel">Delete review?</h5>
         <button type="button" class="btn-close"
           data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Are you sure you want to delete your comment?
+        Are you sure you want to delete your review?
         This action cannot be undone.
       </div>
       <div class="modal-footer">

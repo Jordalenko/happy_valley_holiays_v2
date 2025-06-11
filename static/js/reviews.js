@@ -1,7 +1,8 @@
+const reviewForm = document.getElementById("reviewForm");
+const slug = reviewForm.getAttribute('data-slug');
 const editButtons = document.getElementsByClassName("btn-edit");
 const titleInput = document.getElementById("id_title");
 const commentText = document.getElementById("id_body");
-const commentForm = document.getElementById("commentForm");
 const submitButton = document.getElementById("submitButton");
 const deleteModal = new bootstrap.Modal(document.getElementById("deleteModal"));
 const deleteButtons = document.getElementsByClassName("btn-delete");
@@ -18,15 +19,15 @@ const deleteConfirm = document.getElementById("deleteConfirm");
 */
 for (let button of editButtons) {
     button.addEventListener("click", (e) => {
-    	let reviewId = e.target.getAttribute("review_id");
-    	let reviewContentEl = document.getElementById(`review${reviewId}`);
+    	let reviewSlug = e.target.dataset.reviewSlug;
+    	let reviewContentEl = document.getElementById(`review${reviewSlug}`);
 		let reviewContent = reviewContentEl ? reviewContentEl.innerText : "";
 		let reviewContainer = reviewContentEl.parentElement;
         let reviewTitle = reviewContainer.querySelector("h4")?.innerText || "";
 		if (commentText) commentText.value = reviewContent;
         if (titleInput) titleInput.value = reviewTitle;
     	submitButton.innerText = "Update";
-        commentForm.setAttribute("action", `/${slug}/edit_review/${reviewId}`);
+        reviewForm.setAttribute("action", `/${slug}/edit_review/${reviewSlug}/`);
   });
 }
 
@@ -42,8 +43,8 @@ for (let button of editButtons) {
 */
 for (let button of deleteButtons) {
 	button.addEventListener("click", (e) => {
-    	let reviewId = e.target.getAttribute("review_id");
-    	deleteConfirm.href = `delete_review/${reviewId}`;
+    	const url = e.target.dataset.url;
+    	deleteConfirm.href = url;
     	deleteModal.show();
   	});
 }

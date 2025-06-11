@@ -1,13 +1,13 @@
+import os
+from .models import Cottage, Review
+from .forms import ReviewForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.conf import settings
-from .models import Cottage, Review
-from .forms import CommentForm
-import os
-from .forms import ReviewForm
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.urls import reverse
 
 
 # Create your views here.
@@ -54,21 +54,13 @@ class HomePageView(TemplateView):
         return context
 
 
+print(f"[DEBUG] Imported Review model: {Review}")
+
+
 def cottage_detail(request, slug):
     cottage = get_object_or_404(Cottage, slug=slug)
     images = cottage.images.all()
     cottages = Cottage.objects.all()
-
-    review_qs = Review.objects.filter(approved=True).order_by('-rating', '-created_at')
-    paginator = Paginator(review_qs, 3)
-
-    # page = self.request.GET.get("page")
-    # try:
-    #     page_obj = paginator.page(page)
-    # except PageNotAnInteger:
-    #     page_obj = paginator.page(1)
-    # except EmptyPage:
-    #     page_obj = paginator.page(paginator.num_pages)
 
     # Filter and order reviews
     reviews_qs = cottage.reviews.filter(approved=True).order_by("-created_on")
@@ -79,18 +71,26 @@ def cottage_detail(request, slug):
     page = request.GET.get("page")
     page_obj = paginator.get_page(page)
 
-    # Handle comment form
+    # Handle review form
     if request.method == "POST":
-        comment_form = CommentForm(data=request.POST, files=request.FILES)
-        if comment_form.is_valid():
-            comment = comment_form.save(commit=False)
-            comment.guest = request.user
-            comment.cottage = cottage
-            comment.save()
-            messages.success(request, 'Review submitted and awaiting approval')
+        review_form = ReviewForm(data=request.POST, files=request.FILES)
+        if review_form.is_valid():
+            review = review_form.save(commit=False)
+            review.guest = request.user
+            review.cottage = cottage
+            review.save()
+
+            print(f"[DEBUG] Type of review: {type(review)}")
+            print(f"[DEBUG] Dir of review: {dir(review)}")
+
+            # Accessing id (should not fail unless Review is broken)
+            try:
+                print(f"[DEBUG] review.id: {review.id}")
+            except Exception as e:
+                print(f"[DEBUG] review.id failed: {e}")
             return HttpResponseRedirect(request.path_info)
     else:
-        comment_form = CommentForm()
+        review_form = ReviewForm()
 
     context = {
         'cottage': cottage,
@@ -100,7 +100,7 @@ def cottage_detail(request, slug):
         'page_obj': page_obj,
         'is_paginated': page_obj.has_other_pages(),
         'review_count': review_count,
-        'review_form': comment_form,
+        'review_form': review_form,
     }
 
     return render(request, 'cottages/cottage_detail.html', context)
@@ -135,9 +135,8 @@ def review_detail(request):
     })
 
 
-def review_edit(request, slug, review_id):
-    cottage = get_object_or_404(Cottage, slug=slug)
-    review = get_object_or_404(Review, id=review_id, guest=request.user)
+def review_edit(request, slug, review_slug):
+    review = get_object_or_404(Review, slug=review_slug, guest=request.user)
 
     if request.method == "POST":
         form = ReviewForm(request.POST, request.FILES, instance=review)
@@ -150,11 +149,10 @@ def review_edit(request, slug, review_id):
     return render(request, 'review_edit.html', {'form': form})
 
 
-def review_delete(request, slug, review_id):
-    cottage = get_object_or_404(Cottage, slug=slug)
-    review = get_object_or_404(Review, pk=review_id)
+def review_delete(request, slug, review_slug):
+    review = get_object_or_404(Review, slug=review_slug, cottage__slug=slug)
 
-    if review.author == request.user:
+    if review.guest == request.user:
         review.delete()
         messages.success(request, 'Review deleted!')
     else:
