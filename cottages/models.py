@@ -63,7 +63,7 @@ class CottageImage(models.Model):
 
 
 class HeroImage(models.Model):
-    image = models.ImageField(upload_to='hero/')
+    image = CloudinaryField('image')
     caption = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

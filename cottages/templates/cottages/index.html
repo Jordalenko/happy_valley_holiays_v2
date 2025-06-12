@@ -12,12 +12,10 @@
       {% if lake_images %}
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-          {% for img in lake_images %}
-            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <img src="{{ MEDIA_URL }}media/{{ img }}"
-                class="d-block w-100"
-                alt="Llyn Clywedog view" />
-            </div>
+            {% for img in lake_images %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <img src="{{ img.image.url }}" class="d-block w-100" alt="{{ img.caption }}">
+              </div>
             {% endfor %}
         </div>
         <button

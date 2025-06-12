@@ -50,7 +50,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
-    </style>
+
+        .bg-error { background-color: #dc3545; }  /* red */
+        .bg-success { background-color: #28a745; } /* green */
+        .bg-warning { background-color: #ffc107; } /* yellow */
+        .bg-info { background-color: #0dcaf0; } /* blue */
+        </style>
     
 </head>
 
@@ -105,20 +110,20 @@
         </div>
     </nav>
     <!-- displaying Django messages -->
-    <div class="container">
-    <div class="row">
-        <div class="col-md-8 offset-md-2">
-        {% for message in messages %}
-        <div class="alert {{ message.tags }} alert-dismissible
-            fade show" id="msg" role="alert">
-            {{ message | safe }}
-            <button type="button" class="btn-close"
-            data-bs-dismiss="alert" aria-label="Close"></button>
+    <!-- Toast message container -->
+    <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;">
+    {% for message in messages %}
+    <div class="toast align-items-center text-white bg-{{ message.tags|default:"info" }} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+        <div class="d-flex">
+        <div class="toast-body">
+            {{ message|safe }}
         </div>
-        {% endfor %}
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
     </div>
+    {% endfor %}
     </div>
+
 
     <main class="flex-shrink-0 main-bg">
     {% block content %}
@@ -144,6 +149,15 @@
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous">
         </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            toastElList.forEach(function (toastEl) {
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+            });
+        });
+    </script>
     {% block extras %}
     {% endblock %}
 </body>

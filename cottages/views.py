@@ -1,5 +1,5 @@
 import os
-from .models import Cottage, Review
+from .models import Cottage, Review, HeroImage
 from .forms import ReviewForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
@@ -35,26 +35,9 @@ class HomePageView(TemplateView):
         context["page_obj"] = page_obj
         context["is_paginated"] = page_obj.has_other_pages()
 
-        lake_images = []  # Always define it first
-
-        lake_folder = os.path.join(settings.MEDIA_ROOT, 'hero')
-        if os.path.exists(lake_folder):
-            lake_images = [
-                f"hero/{img}"
-                for img in os.listdir(lake_folder)
-                if img.lower().endswith(('.jpg', '.jpeg', '.png', '.gif'))
-            ]
-
-        for img in lake_images:
-            full_path = os.path.join(settings.MEDIA_ROOT, img)
-            print(f"Checking: {full_path} --> Exists: {os.path.exists(full_path)}")
-
-        context["lake_images"] = lake_images
+        context["lake_images"] = HeroImage.objects.all().order_by('image')
         
         return context
-
-
-print(f"[DEBUG] Imported Review model: {Review}")
 
 
 def cottage_detail(request, slug):
