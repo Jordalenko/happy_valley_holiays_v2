@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container text-center mt-5">
+    <h1 class="display-4">Page Not Found</h1>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Return Home</a>
+    <div class="col-12 text-center">
+            <img src="{% static 'images/sad_house_4714.jpg' %}"  width="50%" class="profile-image" alt="sad house image">
+        </div>
+    <p class="lead">Sorry, the page you're looking for doesn't exist.</p>
+    <br>
+  </div>
+
+{% endblock content %}

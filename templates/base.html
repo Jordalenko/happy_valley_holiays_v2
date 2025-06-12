@@ -85,7 +85,11 @@
 
                 </ul>
                 <span class="navbar-text text-muted">
-                    midwales <span class="text-primary">holidays</span>
+                    {% if user.is_authenticated %}
+                        You are logged in as <strong>{{ user.get_username }}</strong>
+                    {% else %}
+                        midwales <span class="text-primary">holidays</span>
+                    {% endif %}
                 </span>
             </div>
         </div>
@@ -107,17 +111,10 @@
     </div>
 
     <main class="flex-shrink-0 main-bg">
-        {% if user.is_authenticated %}
-        <p class="text-end m-3">You are logged in as {{ user }}</p>
-        {% else %}
-        <p class="text-end m-3">You are not logged in</p>
-        {% endif %}
-
-        {% block content %}
-        <!-- Content Goes here -->
-        {% endblock content %}
-
-    </main>
+    {% block content %}
+    <!-- Content Goes here -->
+    {% endblock content %}
+</main>
 
     <!-- Footer -->
     <footer class="footer mt-auto py-3 dark-bg">
