@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.db.models import Q
 
 
-# Create your views here.
+# home page view
 class HomePageView(TemplateView):
     template_name = "cottages/index.html"
 
@@ -21,9 +21,11 @@ class HomePageView(TemplateView):
         context["cottage_list"] = Cottage.objects.all()
         context["review_list"] = Review.objects.all()
 
+        # Filter and order reviews
         review_qs = Review.objects.filter(approved=True).order_by('-rating', '-created_at')
         paginator = Paginator(review_qs, 3)
 
+        # Handle pagination
         page = self.request.GET.get("page")
         try:
             page_obj = paginator.page(page)
@@ -31,7 +33,8 @@ class HomePageView(TemplateView):
             page_obj = paginator.page(1)
         except EmptyPage:
             page_obj = paginator.page(paginator.num_pages)
-
+        
+        # Add paginated reviews to context
         context["review_list"] = page_obj.object_list
         context["page_obj"] = page_obj
         context["is_paginated"] = page_obj.has_other_pages()
@@ -40,7 +43,7 @@ class HomePageView(TemplateView):
         
         return context
 
-
+# Cottage detail view
 def cottage_detail(request, slug):
     cottage = get_object_or_404(Cottage, slug=slug)
     images = cottage.images.all().order_by('image')
@@ -70,15 +73,6 @@ def cottage_detail(request, slug):
             review.cottage = cottage
             review.save()
 
-            print(f"[DEBUG] Type of review: {type(review)}")
-            print(f"[DEBUG] Dir of review: {dir(review)}")
-
-            # Accessing id (should not fail unless Review is broken)
-            try:
-                print(f"[DEBUG] review.id: {review.id}")
-            except Exception as e:
-                print(f"[DEBUG] review.id failed: {e}")
-            return HttpResponseRedirect(request.path_info)
     else:
         review_form = ReviewForm()
 
@@ -95,11 +89,11 @@ def cottage_detail(request, slug):
 
     return render(request, 'cottages/cottage_detail.html', context)
 
-
+# Review detail view
 def review_detail(request):
     cottages = ['rock-terrace', 'pen-y-graig']
     paginated_reviews_by_cottage = {}
-
+    # Get all cottages to paginate reviews
     for slug in cottages:
         cottage = get_object_or_404(Cottage, slug=slug)
         reviews_qs = Review.objects.filter(cottage=cottage, approved=True).order_by('-rating', '-created_at')
@@ -107,7 +101,7 @@ def review_detail(request):
         page_number = request.GET.get(f'page_{slug}')
         page_obj = paginator.get_page(page_number)
         paginated_reviews_by_cottage[cottage] = page_obj
-
+    # Handle review submission
     if request.method == "POST":
         review_form = ReviewForm(request.POST, request.FILES)
         if review_form.is_valid():
@@ -118,16 +112,16 @@ def review_detail(request):
             return HttpResponseRedirect(request.path_info)
     else:
         review_form = ReviewForm()
-
+    # Render the template with paginated reviews and review form
     return render(request, 'cottages/review_detail.html', {
         'paginated_reviews_by_cottage': paginated_reviews_by_cottage,
         'review_form': review_form,
     })
 
-
+# Review edit and delete views
 def review_edit(request, slug, review_slug):
     review = get_object_or_404(Review, slug=review_slug, guest=request.user)
-
+    # Handle review submission
     if request.method == "POST":
         form = ReviewForm(request.POST, request.FILES, instance=review)
         if form.is_valid():
@@ -138,17 +132,17 @@ def review_edit(request, slug, review_slug):
             return redirect('cottage_detail', slug=slug)
     else:
         form = ReviewForm(instance=review)
-
+    # Render the edit form
     return render(request, 'review_edit.html', {'form': form})
 
-
+# Review delete view
 def review_delete(request, slug, review_slug):
     review = get_object_or_404(Review, slug=review_slug, cottage__slug=slug)
-
+    # Check if the user is the guest who wrote the review
     if review.guest == request.user:
         review.delete()
         messages.success(request, 'Review deleted!')
     else:
         messages.error(request, 'You can only delete your own review!')
-
+    # Redirect to the cottage detail page
     return HttpResponseRedirect(reverse('cottage_detail', args=[slug]))

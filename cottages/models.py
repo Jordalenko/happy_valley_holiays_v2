@@ -9,7 +9,7 @@ import itertools
 STATUS = ((0, "Draft"), (1, "Published"))
 
 
-# Create your models here.
+# cottage model
 class Cottage(models.Model):
 
     cottage_id = models.CharField(
@@ -29,7 +29,7 @@ class Cottage(models.Model):
     bathrooms = models.IntegerField()
     max_guests = models.IntegerField()
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
-    
+    # pretty name for pulldown menu on cottage page
     @property
     def pretty_name(self):
         return self.slug.replace('-', ' ').title()
@@ -43,7 +43,7 @@ class Cottage(models.Model):
     def __str__(self):
         return f"{self.cottage_id} Cottage"
 
-
+# Unique slug generation for the Cottage model
 def unique_slugify(instance, slug_field, slug_source):
     slug = slugify(slug_source)
     ModelClass = instance.__class__
@@ -55,6 +55,7 @@ def unique_slugify(instance, slug_field, slug_source):
     setattr(instance, slug_field, unique_slug)
 
 
+# cottage image model
 class CottageImage(models.Model):
     cottage = models.ForeignKey(Cottage, related_name='images', on_delete=models.CASCADE)
     image = CloudinaryField('image')
@@ -62,6 +63,7 @@ class CottageImage(models.Model):
     import_batch_id = models.CharField(max_length=100, blank=True, null=True)
 
 
+# Image model for hero carousel
 class HeroImage(models.Model):
     image = CloudinaryField('image')
     caption = models.CharField(max_length=255, blank=True)
@@ -71,6 +73,7 @@ class HeroImage(models.Model):
         return self.caption or self.image.name
 
 
+# Review model for cottages
 class Review(models.Model):
     review_id = models.AutoField(primary_key=True)
     guest = models.ForeignKey(
@@ -92,7 +95,7 @@ class Review(models.Model):
     body = models.TextField(max_length=200)
     approved = models.BooleanField(default=False)
     created_on = models.DateTimeField(default=timezone.now)
-
+    # Unique slug generation for the Review model
     def save(self, *args, **kwargs):
         if not self.slug:
             base_slug = slugify(self.title)
@@ -106,6 +109,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review by {self.guest} on {self.cottage}"
+    
     class Meta:
         unique_together = ('guest', 'cottage', "created_on")
         ordering = ["created_on"]

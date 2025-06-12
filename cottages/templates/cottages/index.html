@@ -1,8 +1,7 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 
 <!-- index.html content starts here -->
-
-
+ <!-- hero image carousel - custom css -->
 <div class="container-fluid" id="review-hero-image">
   <div class="row">
     <div class="card mb-4">
@@ -12,12 +11,17 @@
       {% if lake_images %}
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-            {% for img in lake_images %}
-              <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                <img src="{{ img.image.url }}" class="d-block w-100" alt="{{ img.caption }}">
-              </div>
-            {% endfor %}
+          {% for img in lake_images %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}">
+            <img
+              src="{{ img.image.url }}"
+              class="d-block w-100"
+              alt="{{ img.caption }}"
+            />
+          </div>
+          {% endfor %}
         </div>
+        <!-- carousel navigation -->
         <button
           class="carousel-control-prev"
           type="button"
@@ -40,7 +44,7 @@
       <div class="col-12 mt-3 left">
         <div class="row">
           <h1 class="card-header text-center">
-              <strong>Cottages</strong>
+            <strong>Cottages</strong>
           </h1>
           {% for cottage in cottage_list %}
           <div class="col-md-6">
@@ -62,6 +66,7 @@
                   {% endif %}
                   <div class="image-flash"></div>
                 </div>
+                <!-- link to cottage detail template -->
                 <a
                   href="{% url 'cottage_detail' cottage.slug %}"
                   class="post-link"
@@ -76,15 +81,17 @@
                 <hr />
                 <p class="card-text text-muted h6">
                   <a
-                  href="{% url 'cottage_detail' cottage.slug %}"
-                  class="post-link"
-                >
-                  <h2 class="card-title">Coming Soon Booking!</h2>
-                </a>
+                    href="{% url 'cottage_detail' cottage.slug %}"
+                    class="post-link"
+                  >
+                  <!-- temporary link to demonstrate booking button location -->
+                    <h2 class="card-title">Coming Soon Booking!</h2>
+                  </a>
                 </p>
               </div>
             </div>
           </div>
+          <!-- cottages paginated by 2 -->
           {% if forloop.counter|divisibleby:2 %}
         </div>
         <div class="row">{% endif %} {% endfor %}</div>
@@ -94,14 +101,23 @@
       <!-- Reviews Column -->
       <div class="col-12 mt-3 justify-content-center">
         <div class="row">
+          <!-- link to review detail template -->
           <h2 class="text-center">
-            <a href="{% url 'review_detail' %}" class="review-link brand">Reviews</a>
+            <a href="{% url 'review_detail' %}" class="review-link brand"
+              >Reviews</a
+            >
           </h2>
+          <!-- reviews paginated by 3 -->
           {% for review in review_list %}
           <div id="reviews-section" class="col-md-4">
             <div class="card mb-4">
               <div class="card-body">
-                <h2 class="truncate-one-line d-block fs-5 fs-md-6" style="max-width: 100%; width: 100%;">{{ review.title }}</h2>
+                <h2
+                  class="truncate-one-line d-block fs-5 fs-md-6"
+                  style="max-width: 100%; width: 100%"
+                >
+                  {{ review.title }}
+                </h2>
                 <div class="image-container">
                   {% if "placeholder" in review.featured_image.url %}
                   <img
@@ -119,7 +135,7 @@
                 </div>
                 <p class="card-text">Rating: {{ review.rating }}/5</p>
                 <p class="card-text text-muted h6">{{ review.created_at}}</p>
-                <hr>
+                <hr />
               </div>
             </div>
           </div>
@@ -129,24 +145,30 @@
       </div>
     </div>
     {% if is_paginated %}
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    {% if page_obj.has_previous %}
-      <a href="?page={{ page_obj.previous_page_number }}#reviews-section" class="btn btn-outline-dark btn-lg">
+    <!-- condition to display previous button -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      {% if page_obj.has_previous %}
+      <a
+        href="?page={{ page_obj.previous_page_number }}#reviews-section"
+        class="btn btn-outline-dark btn-lg"
+      >
         &laquo; Previous 3 Reviews
       </a>
-    {% else %}
-      <span></span>  <!-- Keeps spacing consistent if no previous page -->
-    {% endif %}
-
-    {% if page_obj.has_next %}
-      <a href="?page={{ page_obj.next_page_number }}#reviews-section" class="btn btn-dark btn-lg">
+      {% else %}
+      <!-- Keeps spacing consistent if no previous page -->
+      <span></span>
+       <!-- condition to display next button -->
+      {% endif %} {% if page_obj.has_next %}
+      <a
+        href="?page={{ page_obj.next_page_number }}#reviews-section"
+        class="btn btn-dark btn-lg"
+      >
         Next 3 Reviews &raquo;
       </a>
+      {% endif %}
+    </div>
     {% endif %}
   </div>
-{% endif %}
-</div>
-
-  <!-- index.html content ends here -->
   {% endblock %}
+  <!-- index.html content ends here -->
 </div>

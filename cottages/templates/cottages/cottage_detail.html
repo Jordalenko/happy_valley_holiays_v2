@@ -28,6 +28,7 @@
     <div class="card mb-4">
         <div id="cottageCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
+            <!--  for loop to hide img captions on smaller screens  -->
             {% for img in images %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 <img src="{{ img.image.url }}" class="d-block w-100" alt="{{ img.caption|default:cottage.pretty_name }}">
@@ -39,7 +40,7 @@
             </div>
             {% endfor %}
           </div>
-
+          <!-- Carousel controls -->
           <button class="carousel-control-prev" type="button" data-bs-target="#cottageCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -49,6 +50,7 @@
             <span class="visually-hidden">Next</span>
           </button>
         </div>
+        <!-- cottages -->
         <div class="card-body">
             <h2 class="card-title" id="description">{{ cottage.id }}</h2>
             <p class="card-text">{{ cottage.description }}</p>
@@ -66,6 +68,7 @@
                   href="{% url 'cottage_detail' cottage.slug %}"
                   class="post-link"
                   >
+                  <!-- temporary link to demonstrate booking button location -->
                   <h2 class="card-title">Coming Soon Booking!</h2>
                   </a>
               </p>
@@ -74,10 +77,9 @@
 </div>
 
 <div class="container">
-    
-    <!-- Displaying count of reviews -->
   <div class="row">
     <div class="col-12">
+      <!-- Displaying count of reviews -->
       <strong class="text-secondary">
         <i class="far fa-comments"></i> {{ review_count }}
       </strong>
@@ -88,6 +90,7 @@
     <div id="reviews-section" class="col-md-8 card mb-4  mt-3 ">
       <h3>Reviews:</h3>
       <div class="card-body">
+        <!-- for loop to assess the paginated (by one) reviews permissions -->
         {% for review in page_obj %}
           <div class="p-2 reviews
             {% if not review.approved and review.guest == user %}
@@ -100,34 +103,36 @@
           {{ review.guest }}
           <span class="font-weight-normal">{{ review.created_on }}</span> wrote:
         </p>
-
+        <!-- display title on one line - custom css -->
         <h4 class="truncate-one-line d-block fs-5 fs-md-6" style="max-width: 100%; width: 100%;">{{ review.title }}</h4>
-
         {% if review.featured_image %}
+        <!-- display image - custom css -->
           <img src="{{ review.featured_image.url }}" alt="Review Image" id="review-image" class="img-fluid" />
         {% endif %}
-
         <div id="review{{ review.slug }}">
           {{ review.body | linebreaks }}
         </div>
-
+        <!-- review permissions -->
         {% if not review.approved and review.guest == user %}
           <p class="approval">This review is awaiting approval</p>
         {% endif %}
-
+        <!-- review delete and edit permissions -->
         {% if user.is_authenticated and review.guest == user %}
+        <!-- use slug of review title to identify review -->
             <button class="btn btn-delete" 
           data-url="{% url 'review_delete' slug=cottage.slug review_slug=review.slug %}">
             Delete
           </button>
+        <!-- use slug of review title to identify review -->
           <button class="btn btn-edit" data-review-slug="{{ review.slug }}">Edit</button>
         {% endif %}
         </div>
-        <!-- End of review -->
+        <!-- end of review -->
         <hr>
-        <!-- Review pagination -->
+        <!-- review pagination buttons -->
         {% if is_paginated %}
           <div class="d-flex justify-content-between my-4">
+            <!-- previous button condition custom css -->
             {% if page_obj.has_previous %}
               <a href="?page={{ page_obj.previous_page_number }}#reviews-section" class="btn btn-outline-dark btn-lg">
                 &laquo; Previous Review
@@ -135,7 +140,7 @@
             {% else %}
               <span></span>
             {% endif %}
-
+            <!-- next button condition custom css -->
             {% if page_obj.has_next %}
               <a href="?page={{ page_obj.next_page_number }}#reviews-section" class="btn btn-dark btn-lg">
                 Next Review &raquo;
@@ -143,16 +148,18 @@
             {% endif %}
           </div>
         {% endif %}
-        <!-- Our for loop ends here -->
         {% endfor %}
+        <!-- Our for loop ends here -->
       </div>
     </div>
     <!-- Creating New Reviews -->
     <div class="col-md-4 card mb-4 mt-3">
       <div class="card-body">
+        <!-- new review permissions -->
         {% if user.is_authenticated %}
           <h3>Leave a review:</h3>
           <p>Posting as: {{ user.username }}</p>
+          <!-- create slug of review title to identify review -->
           <form id="reviewForm"
             method="post"
             enctype="multipart/form-data"
