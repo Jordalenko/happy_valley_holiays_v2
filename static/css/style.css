@@ -180,3 +180,13 @@ body {
   display: block;
   margin: 0 auto;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+.truncate-one-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

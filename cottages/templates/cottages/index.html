@@ -94,30 +94,25 @@
           <div class="col-md-4">
             <div class="card mb-4">
               <div class="card-body">
+                <h2 class="truncate-one-line d-block fs-5 fs-md-6" style="max-width: 100%; width: 100%;">{{ review.title }}</h2>
                 <div class="image-container">
                   {% if "placeholder" in review.featured_image.url %}
                   <img
-                    class="card-img-top"
+                    class="img-fluid"
                     src="{% static 'images/default.jpg' %}"
                     alt="placeholder image"
                   />
                   {% else %}
                   <img
-                    class="card-img-top"
+                    class="img-fluid"
                     src=" {{ review.featured_image.url }}"
                     alt="{{ review.title }}"
                   />
                   {% endif %}
-                  <div class="image-flash">
-                    <p class="author">Guest: {{ review.guest }}</p>
-                  </div>
                 </div>
-                  <h2 class="card-title">{{ review.title }}</h2>
-                </a>
-
-                <hr />
                 <p class="card-text">Rating: {{ review.rating }}/5</p>
                 <p class="card-text text-muted h6">{{ review.created_at}}</p>
+                <hr>
               </div>
             </div>
           </div>

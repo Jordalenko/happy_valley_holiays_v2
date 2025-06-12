@@ -80,7 +80,7 @@
   </div>
   <!-- Displaying Reviews -->
   <div class="row">
-    <div class="col-md-8 card mb-4  mt-3 ">
+    <div id="reviews-section" class="col-md-8 card mb-4  mt-3 ">
       <h3>Reviews:</h3>
       <div class="card-body">
         {% for review in page_obj %}
@@ -96,7 +96,7 @@
           <span class="font-weight-normal">{{ review.created_on }}</span> wrote:
         </p>
 
-        <h4>{{ review.title }}</h4>
+        <h4 class="truncate-one-line d-block fs-5 fs-md-6" style="max-width: 100%; width: 100%;">{{ review.title }}</h4>
 
         {% if review.featured_image %}
           <img src="{{ review.featured_image.url }}" alt="Review Image" id="review-image" class="img-fluid" />
@@ -124,7 +124,7 @@
         {% if is_paginated %}
           <div class="d-flex justify-content-between my-4">
             {% if page_obj.has_previous %}
-              <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark btn-lg">
+              <a href="?page={{ page_obj.previous_page_number }}#reviews-section" class="btn btn-outline-dark btn-lg">
                 &laquo; Previous Review
               </a>
             {% else %}
@@ -132,7 +132,7 @@
             {% endif %}
 
             {% if page_obj.has_next %}
-              <a href="?page={{ page_obj.next_page_number }}" class="btn btn-dark btn-lg">
+              <a href="?page={{ page_obj.next_page_number }}#reviews-section" class="btn btn-dark btn-lg">
                 Next Review &raquo;
               </a>
             {% endif %}
