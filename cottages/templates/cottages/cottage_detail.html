@@ -84,13 +84,12 @@
       <h3>Reviews:</h3>
       <div class="card-body">
         {% for review in page_obj %}
-        <div class="p-2 reviews
+        <div class="p-2 reviews">
         {% if not review.approved and review.guest == user %}
           faded
         {% elif not review.approved %}
           d-none
-        {% endif %}">
-        
+        {% endif %}
         <p class="font-weight-bold">
           {{ review.guest }}
           <span class="font-weight-normal">{{ review.created_on }}</span> wrote:
@@ -145,6 +144,11 @@
     <!-- Creating New Reviews -->
     <div class="col-md-4 card mb-4 mt-3">
       <div class="card-body">
+         {% if not review.approved and review.guest == user %}
+          faded
+        {% elif not review.approved %}
+          d-none
+        {% endif %}
         {% if user.is_authenticated %}
         <h3>Leave a review:</h3>
         <p>Posting as: {{ user.username }}</p>

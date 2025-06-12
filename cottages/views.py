@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import reverse
+from django.db.models import Q
 
 
 # Create your views here.
@@ -42,11 +43,17 @@ class HomePageView(TemplateView):
 
 def cottage_detail(request, slug):
     cottage = get_object_or_404(Cottage, slug=slug)
-    images = cottage.images.all()
+    images = cottage.images.all().order_by('image')
     cottages = Cottage.objects.all()
 
     # Filter and order reviews
-    reviews_qs = cottage.reviews.filter(approved=True).order_by("-created_on")
+    user = request.user
+    if user.is_authenticated:
+        reviews_qs = cottage.reviews.filter(
+            Q(approved=True) | Q(guest=user)
+        ).order_by("-created_on")
+    else:
+        reviews_qs = cottage.reviews.filter(approved=True).order_by("-created_on")
     review_count = reviews_qs.count()
 
     # Set up pagination
@@ -124,7 +131,10 @@ def review_edit(request, slug, review_slug):
     if request.method == "POST":
         form = ReviewForm(request.POST, request.FILES, instance=review)
         if form.is_valid():
-            form.save()
+            review = form.save(commit=False)
+            review.approved = False  # Reset approval on edit
+            review.save()
+            messages.info(request, "Your edited review is now awaiting approval.")
             return redirect('cottage_detail', slug=slug)
     else:
         form = ReviewForm(instance=review)

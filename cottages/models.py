@@ -57,7 +57,7 @@ def unique_slugify(instance, slug_field, slug_source):
 
 class CottageImage(models.Model):
     cottage = models.ForeignKey(Cottage, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='cottages/')
+    image = CloudinaryField('image')
     caption = models.CharField(max_length=255, blank=True)
     import_batch_id = models.CharField(max_length=100, blank=True, null=True)
 
