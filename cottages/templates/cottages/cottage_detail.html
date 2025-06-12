@@ -24,7 +24,7 @@
       </div>
     </div>
     <!-- Cottage Details Card -->
-     <!-- Cottage Image Carousel -->
+    <!-- Cottage Image Carousel -->
     <div class="card mb-4">
         <div id="cottageCarousel" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
@@ -59,8 +59,16 @@
                 {% if cottage.price_per_night %}<li>Price per night: £{{ cottage.price_per_night }}</li>{% endif %}
             </ul>
             <hr>
-            <h4 id="booking">Booking Info</h4>
             <!-- Booking form -->
+            <h4 id="booking">Booking Info</h4>
+            <p class="card-text text-muted h6">
+                  <a
+                  href="{% url 'cottage_detail' cottage.slug %}"
+                  class="post-link"
+                  >
+                  <h2 class="card-title">Coming Soon Booking!</h2>
+                  </a>
+              </p>
         </div>
     </div>
 </div>
@@ -73,9 +81,6 @@
       <strong class="text-secondary">
         <i class="far fa-comments"></i> {{ review_count }}
       </strong>
-    </div>
-    <div class="col-12">
-      <hr>
     </div>
   </div>
   <!-- Displaying Reviews -->
