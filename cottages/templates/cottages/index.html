@@ -1,7 +1,10 @@
-{% extends "base.html" %} {% load static %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
 
 <!-- index.html content starts here -->
- <!-- hero image carousel - custom css -->
+<!-- hero image carousel - custom css -->
 <div class="container-fluid" id="review-hero-image">
   <div class="row">
     <div class="card mb-4">
@@ -27,6 +30,8 @@
           type="button"
           data-bs-target="#heroCarousel"
           data-bs-slide="prev"
+          aria-label="Previous slide"
+          title="Previous slide"
         >
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         </button>
@@ -35,11 +40,16 @@
           type="button"
           data-bs-target="#heroCarousel"
           data-bs-slide="next"
+          aria-label="Next slide"
+          title="Next slide"
         >
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
         </button>
       </div>
       {% endif %}
+    </div>
+  </div>
+</div>
       <!-- Cottages -->
       <div class="col-12 mt-3 left">
         <div class="row">
@@ -60,7 +70,7 @@
                   {% else %}
                   <img
                     class="card-img-top"
-                    src=" {{ cottage.featured_image.url }}"
+                    src="{{ cottage.featured_image.url }}"
                     alt="{{ cottage.title }}"
                   />
                   {% endif %}
@@ -79,24 +89,23 @@
                   Price per night: £{{ cottage.price_per_night }}
                 </p>
                 <hr />
-                <p class="card-text text-muted h6">
-                  <a
-                    href="{% url 'cottage_detail' cottage.slug %}"
-                    class="post-link"
-                  >
-                  <!-- temporary link to demonstrate booking button location -->
+                <div class="card-text text-muted h6">
+                  <a href="/rock-terrace/" class="post-link">
+                    <!-- temporary link to demonstrate booking button location -->
                     <h2 class="card-title">Coming Soon Booking!</h2>
                   </a>
-                </p>
+                </div>
               </div>
             </div>
           </div>
           <!-- cottages paginated by 2 -->
           {% if forloop.counter|divisibleby:2 %}
         </div>
-        <div class="row">{% endif %} {% endfor %}</div>
+        <div class="row">
+          {% endif %}
+          {% endfor %}
+        </div>
       </div>
-    </div>
     <div class="row">
       <!-- Reviews Column -->
       <div class="col-12 mt-3 justify-content-center">
@@ -109,12 +118,11 @@
           </h2>
           <!-- reviews paginated by 3 -->
           {% for review in review_list %}
-          <div id="reviews-section" class="col-md-4">
+          <div class="col-md-4">
             <div class="card mb-4">
               <div class="card-body">
                 <h2
-                  class="truncate-one-line d-block fs-5 fs-md-6"
-                  style="max-width: 100%; width: 100%"
+                  class="truncate-one-line d-block fs-5 fs-md-6 review-title"
                 >
                   {{ review.title }}
                 </h2>
@@ -128,7 +136,7 @@
                   {% else %}
                   <img
                     class="img-fluid"
-                    src=" {{ review.featured_image.url }}"
+                    src="{{ review.featured_image.url }}"
                     alt="{{ review.title }}"
                   />
                   {% endif %}
@@ -141,7 +149,10 @@
           </div>
           {% if forloop.counter|divisibleby:3 %}
         </div>
-        <div class="row">{% endif %} {% endfor %}</div>
+        <div class="row">
+          {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
     {% if is_paginated %}
@@ -168,7 +179,5 @@
       {% endif %}
     </div>
     {% endif %}
-  </div>
   {% endblock %}
-  <!-- index.html content ends here -->
-</div>
+<!-- index.html content ends here -->

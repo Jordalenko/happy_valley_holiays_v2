@@ -7,11 +7,13 @@
 {% url 'account_signup' as signup_url %}
 {% url 'account_logout' as logout_url %}
 
+
 <!DOCTYPE html>
 <html class="h-100" lang="en">
 
 <head>
     <title>Happy Valley Holidays</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- Google Fonts CSS -->
@@ -85,22 +87,21 @@
                         >
                     </li>
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'password_change' %}">Change Password</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'password_change' %}">Change Password</a>
+                        </li>
                     {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == signup_url %}active{% endif %}" aria-current="page"
-                            href="{% url 'account_signup' %}">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.path == login_url %}active{% endif %}" aria-current="page" href="{% url 'account_login' %}">Login</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == signup_url %}active{% endif %}" aria-current="page"
+                                href="{% url 'account_signup' %}">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.path == login_url %}active{% endif %}" aria-current="page" href="{% url 'account_login' %}">Login</a>
+                        </li>
                     {% endif %}
-
                 </ul>
                 <span class="navbar-text text-muted">
                     {% if user.is_authenticated %}
@@ -135,27 +136,22 @@
 </main>
 
     <!-- Footer -->
-
-    <footer class="footer mt-auto py-3 white-bg">
-        <p class="m-0 text-center text-black">
-            <h3 class="text-center">Contact us:</h3>
-            <address class="text-center">
-            Happy Valley Holidays
-            <br />
-            #10 12 Great Oak Street,
-            <br />
-            Llanidloes, Powys, GB SY18 6BU
-            <br />
-            Ph. 07847 675773
-          </address>
-           <p class="text-center"> Follow us: 
-            <i class="fab fa-facebook-square ms-3"></i>
-            <i class="fab fa-twitter-square ms-3"></i>
-            <i class="fab fa-instagram-square ms-3"></i>
-            <i class="fab fa-youtube-square ms-3"></i>
-            </p>
-        </p>
-    </footer>
+<footer class="footer mt-auto py-3 white-bg">
+  <h3 class="text-center">Contact us:</h3>
+  <address class="text-center">
+    Happy Valley Holidays<br />
+    #10 12 Great Oak Street,<br />
+    Llanidloes, Powys, GB SY18 6BU<br />
+    Ph. 07847 675773
+  </address>
+  <p class="text-center">
+    Follow us: 
+    <i class="fab fa-facebook-square ms-3"></i>
+    <i class="fab fa-twitter-square ms-3"></i>
+    <i class="fab fa-instagram-square ms-3"></i>
+    <i class="fab fa-youtube-square ms-3"></i>
+  </p>
+</footer>
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
