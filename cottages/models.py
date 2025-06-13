@@ -30,9 +30,11 @@ class Cottage(models.Model):
     max_guests = models.IntegerField()
     price_per_night = models.DecimalField(max_digits=10, decimal_places=2)
     # pretty name for pulldown menu on cottage page
+
     @property
     def pretty_name(self):
         return self.slug.replace('-', ' ').title()
+
     def image_url(self):
         if self.cloudinary_url:
             return self.cloudinary_url
@@ -42,6 +44,7 @@ class Cottage(models.Model):
 
     def __str__(self):
         return f"{self.cottage_id} Cottage"
+
 
 # Unique slug generation for the Cottage model
 def unique_slugify(instance, slug_field, slug_source):
@@ -57,7 +60,10 @@ def unique_slugify(instance, slug_field, slug_source):
 
 # cottage image model
 class CottageImage(models.Model):
-    cottage = models.ForeignKey(Cottage, related_name='images', on_delete=models.CASCADE)
+    cottage = models.ForeignKey(
+        Cottage,
+        related_name='images',
+        on_delete=models.CASCADE)
     image = CloudinaryField('image')
     caption = models.CharField(max_length=255, blank=True)
     import_batch_id = models.CharField(max_length=100, blank=True, null=True)
@@ -95,6 +101,7 @@ class Review(models.Model):
     body = models.TextField(max_length=200)
     approved = models.BooleanField(default=False)
     created_on = models.DateTimeField(default=timezone.now)
+
     # Unique slug generation for the Review model
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -109,7 +116,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review by {self.guest} on {self.cottage}"
-    
+
     class Meta:
         unique_together = ('guest', 'cottage', "created_on")
         ordering = ["created_on"]

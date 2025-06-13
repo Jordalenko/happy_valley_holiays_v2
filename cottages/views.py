@@ -22,7 +22,11 @@ class HomePageView(TemplateView):
         context["review_list"] = Review.objects.all()
 
         # Filter and order reviews
-        review_qs = Review.objects.filter(approved=True).order_by('-rating', '-created_at')
+        review_qs = Review.objects.filter(
+            approved=True
+        ).order_by(
+            '-rating', '-created_at'
+        )
         paginator = Paginator(review_qs, 3)
 
         # Handle pagination
@@ -33,15 +37,16 @@ class HomePageView(TemplateView):
             page_obj = paginator.page(1)
         except EmptyPage:
             page_obj = paginator.page(paginator.num_pages)
-        
+
         # Add paginated reviews to context
         context["review_list"] = page_obj.object_list
         context["page_obj"] = page_obj
         context["is_paginated"] = page_obj.has_other_pages()
 
         context["lake_images"] = HeroImage.objects.all().order_by('image')
-        
+
         return context
+
 
 # Cottage detail view
 def cottage_detail(request, slug):
@@ -50,13 +55,9 @@ def cottage_detail(request, slug):
     cottages = Cottage.objects.all()
 
     # Filter and order reviews
-    user = request.user
-    if user.is_authenticated:
-        reviews_qs = cottage.reviews.filter(
-            Q(approved=True) | Q(guest=user)
-        ).order_by("-created_on")
-    else:
-        reviews_qs = cottage.reviews.filter(approved=True).order_by("-created_on")
+    reviews_qs = cottage.reviews.filter(
+        approved=True
+    ).order_by("-created_on")
     review_count = reviews_qs.count()
 
     # Set up pagination
@@ -68,7 +69,9 @@ def cottage_detail(request, slug):
     if request.method == "POST":
         review_form = ReviewForm(data=request.POST, files=request.FILES)
         if review_form.is_valid():
-            review = review_form.save(commit=False)
+            review = review_form.save(
+                commit=False
+            )
             review.guest = request.user
             review.cottage = cottage
             review.save()
@@ -89,6 +92,7 @@ def cottage_detail(request, slug):
 
     return render(request, 'cottages/cottage_detail.html', context)
 
+
 # Review detail view
 def review_detail(request):
     cottages = ['rock-terrace', 'pen-y-graig']
@@ -96,7 +100,10 @@ def review_detail(request):
     # Get all cottages to paginate reviews
     for slug in cottages:
         cottage = get_object_or_404(Cottage, slug=slug)
-        reviews_qs = Review.objects.filter(cottage=cottage, approved=True).order_by('-rating', '-created_at')
+        reviews_qs = (
+            Review.objects.filter(cottage=cottage, approved=True)
+            .order_by('-rating', '-created_at')
+        )
         paginator = Paginator(reviews_qs, 3)
         page_number = request.GET.get(f'page_{slug}')
         page_obj = paginator.get_page(page_number)
@@ -108,7 +115,10 @@ def review_detail(request):
             review = review_form.save(commit=False)
             review.guest = request.user
             review.save()
-            messages.success(request, 'Review submitted and awaiting approval.')
+            messages.success(
+                request,
+                'Review submitted and awaiting approval.'
+            )
             return HttpResponseRedirect(request.path_info)
     else:
         review_form = ReviewForm()
@@ -117,6 +127,7 @@ def review_detail(request):
         'paginated_reviews_by_cottage': paginated_reviews_by_cottage,
         'review_form': review_form,
     })
+
 
 # Review edit and delete views
 def review_edit(request, slug, review_slug):
@@ -128,12 +139,16 @@ def review_edit(request, slug, review_slug):
             review = form.save(commit=False)
             review.approved = False  # Reset approval on edit
             review.save()
-            messages.info(request, "Your edited review is now awaiting approval.")
+            messages.info(
+                request,
+                "Your edited review is now awaiting approval."
+            )
             return redirect('cottage_detail', slug=slug)
     else:
         form = ReviewForm(instance=review)
     # Render the edit form
     return render(request, 'review_edit.html', {'form': form})
+
 
 # Review delete view
 def review_delete(request, slug, review_slug):
