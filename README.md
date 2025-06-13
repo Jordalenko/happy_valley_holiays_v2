@@ -363,9 +363,7 @@ Once the form is submitted the user is redirected to a page advising them the pa
 4. 
 
 ## Testing
-Testing documentation incomplete. **Future Feature**
-
-All user story functionality in the site tested.  Everything works.
+Testing documentation can be found [here.](/testing.md)
 
 ## Bugs
 
