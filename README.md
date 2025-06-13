@@ -2,7 +2,7 @@
 
 [Link to deployed site](https://happy-valley-holidays-f15bc71074aa.herokuapp.com/)
 <hr>
-Introdctory description of site.
+This site was conceived as a booking site for a midwales holiday cottage rental company. I had to scope down to complete the project so the booking app and guest profile app are incomplete at this time. But it is still a very engaging and attractive site with CRUD functionality for users in the reviews part of the cottage_detail page and the user login profile section.
 
 ![amiresponsive](/static/images/readme/hvh-amiresponsive.jpg)
 
