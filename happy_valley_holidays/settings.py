@@ -12,9 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url
+# import dj_database_url
 if os.path.isfile('env.py'):
     import env
+
 
 # template directory settings
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,11 +29,9 @@ TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    '.herokuapp.com',
-    'happy-valley-holidays.herokuapp.com',
     '127.0.0.0',
     '127.0.0.1',
 ]
@@ -50,10 +49,10 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
-    'cloudinary_storage',
+    # 'cloudinary_storage',
     'crispy_forms',
     'crispy_bootstrap5',
-    'cloudinary',
+    # 'cloudinary',
     'cottages',
     'guest_profile',
     'bookings',
@@ -62,9 +61,9 @@ INSTALLED_APPS = [
 ]
 
 # Cloudinary settings
-SITE_ID = 1
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+# SITE_ID = 1
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_REDIRECT_URL = '/'
 
 
 # Crispy Forms settings
@@ -101,7 +100,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'happy_valley_holidays.wsgi.application'
+# WSGI_APPLICATION = 'happy_valley_holidays.wsgi.application'
 
 
 # Database
@@ -123,7 +122,7 @@ DATABASES = {
 # Password validation
 CSRF_TRUSTED_ORIGINS = [
     "https://*.codeinstitute-ide.net/",
-    "https://*.herokuapp.com"
+    # "https://*.herokuapp.com"
 ]
 
 

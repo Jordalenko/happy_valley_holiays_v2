@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-from cloudinary.models import CloudinaryField
+# from cloudinary.models import CloudinaryField
 from django.utils import timezone
 import itertools
 
@@ -17,7 +17,12 @@ class Cottage(models.Model):
         max_length=20,
         default="Pen Y Graig"
     )
-    featured_image = CloudinaryField('image', default='placeholder')
+    featured_image = models.ImageField(
+        upload_to='cottages/featured',
+        blank=True,
+        null=True,
+        default='placeholder'
+    )
     description = models.CharField(
         max_length=400,
         blank=True,
@@ -36,10 +41,8 @@ class Cottage(models.Model):
         return self.slug.replace('-', ' ').title()
 
     def image_url(self):
-        if self.cloudinary_url:
-            return self.cloudinary_url
-        elif self.image:
-            return self.image.url
+        if self.featured_image:
+            return self.featured_image.url
         return ''
 
     def __str__(self):
@@ -63,15 +66,22 @@ class CottageImage(models.Model):
     cottage = models.ForeignKey(
         Cottage,
         related_name='images',
-        on_delete=models.CASCADE)
-    image = CloudinaryField('image')
+        on_delete=models.CASCADE
+    )
+    image = models.ImageField(
+        upload_to='cottages/images',
+        blank=True,
+        null=True,
+        default='placeholder'
+    )
     caption = models.CharField(max_length=255, blank=True)
     import_batch_id = models.CharField(max_length=100, blank=True, null=True)
 
 
 # Image model for hero carousel
 class HeroImage(models.Model):
-    image = CloudinaryField('image')
+    image = models.ImageField(upload_to='cottages/hero', blank=True, null=True,
+                              default='placeholder')
     caption = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -87,7 +97,9 @@ class Review(models.Model):
     cottage = models.ForeignKey(
         Cottage, on_delete=models.CASCADE, related_name="reviews")
     title = models.CharField(max_length=120)
-    featured_image = CloudinaryField('image', default='placeholder')
+    featured_image = models.ImageField(
+        upload_to='cottages/featured', blank=True, null=True,
+        default='placeholder')
     rating = models.IntegerField(
         default=0,
         choices=[(i, str(i)) for i in range(1, 6)],

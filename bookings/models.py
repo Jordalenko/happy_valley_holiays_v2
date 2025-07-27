@@ -5,10 +5,10 @@ from cottages.models import Cottage
 
 STATUS = ((0, "Draft"), (1, "Published"))
 
-# Create your models here.
+
 class Reservation(models.Model):
     res_id = models.AutoField(primary_key=True)
-    guest = models.ForeignKey(Guest, on_delete=models.CASCADE)
+    guest = models.ForeignKey(User, on_delete=models.CASCADE)
     cottage = models.ForeignKey(Cottage, on_delete=models.CASCADE)
     check_in_date = models.DateField()
     check_out_date = models.DateField()
