@@ -33,11 +33,11 @@ class ReservationCreateView(CreateView):
     
     def get_initial(self):
         initial = super().get_initial()
-        cottage_id = self.request.GET.get("cottage")
-        if cottage_id:
+        cottage_slug = self.request.GET.get("cottage")
+        if cottage_slug:
             try:
-                cottage = Cottage.objects.get(pk=cottage_id)
-                initial["cottage"] = cottage
+                cottage = Cottage.objects.get(slug=cottage_slug)
+                initial["cottage"] = cottage.pk
             except Cottage.DoesNotExist:
                 pass
         return initial
