@@ -15,7 +15,9 @@ class Cottage(models.Model):
     cottage_id = models.CharField(
         primary_key=True,
         max_length=20,
-        default="Pen Y Graig"
+        unique=True,
+        blank=False,
+        null=False,
     )
     featured_image = models.ImageField(
         upload_to='cottages/featured',
