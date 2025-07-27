@@ -135,13 +135,41 @@
     <!-- Footer -->
 <footer class="footer mt-auto py-3 white-bg">
     <hr>
-  <h3 class="text-center">Contact us:</h3>
-  <address class="text-center">
-    Happy Valley Holidays<br />
-    #10 12 Great Oak Street,<br />
-    Llanidloes, Powys, GB SY18 6BU<br />
-    Ph. 07847 675773
-  </address>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 text-center footer-map-container">
+          <img src="{% static 'images/llani_map_detail.png' %}" style="width: 90%; height: 90%; object-fit: cover;" usemap="#footer-map" alt="Clickable Map" />
+
+            <map name="footer-map">
+                <area 
+                shape="rect" 
+                coords="90,10,400,120"
+                href="https://www.google.com/maps/place/6+Rock+Ter,+Llanidloes+SY18+6HR/@52.4537818,-3.5474614,17z/data=!3m1!4b1!4m5!3m4!1s0x486fedbf1c479459:0xafabcf6ec13bbec8!8m2!3d52.4537818!4d-3.5448865?entry=ttu&g_ep=EgoyMDI1MDcyMy4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                alt="Rock-Terrace" />
+                <area
+                shape="rect"
+                coords="90,180,400,320"
+                href="https://www.google.com/maps/place/6+China+St,+Llanidloes+SY18+6AB/@52.4480882,-3.542891,17z/data=!3m1!4b1!4m6!3m5!1s0x486fedc7f3903447:0x604acf882d38961e!8m2!3d52.4480882!4d-3.5403107!16s%2Fg%2F11cncgd6bm?entry=ttu&g_ep=EgoyMDI1MDcyMy4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                alt="Pen-Y-Graig" />
+            </map>
+        </div>
+        <div class="col-md-6 text-center footer-contact-container">
+            <h3 class="text-center">Contact us:</h3>
+            <address class="text-center">
+                Happy Valley Holidays<br />
+                #10 12 Great Oak Street,<br />
+                Llanidloes, Powys, GB SY18 6BU<br />
+                Ph. 07847 675773
+            </address>
+        </div>
+      </div>
+  <hr>
+
+    <!-- Bootstrap JS Bundle with Popper -->
   <p class="text-center">
     Follow us: 
     <i class="fab fa-facebook-square ms-3"></i>

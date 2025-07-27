@@ -190,3 +190,27 @@ html {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* Footer */
+
+/* #footer-map-image {
+  flex-shrink: 1;
+  width: 50%;
+  max-width: 50%;
+  height: auto;
+  display: block;
+}
+
+.footer-map-container img {
+  flex-shrink: 1;
+  width: 50%;
+  max-width: 50%;
+  height: auto;
+  display: block;
+}
+
+/* Optional: you can limit the map container max-width as well */
+.footer-map-container {
+  max-width: 400px;
+  margin: 0 auto;
+} */
