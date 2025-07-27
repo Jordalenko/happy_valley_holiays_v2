@@ -34,7 +34,7 @@ urlpatterns = [
          auth_views.PasswordChangeDoneView.as_view(template_name='registration/password_change_done.html'), 
          name='password_change_done'),
     path("", include("cottages.urls"), name="cottages-urls"),
-    path("bookings/", include("bookings.urls"), name="bookings-urls"),
+    path("bookings/", include(("bookings.urls", "bookings"), namespace="bookings")),
 ]
 
 if settings.DEBUG:

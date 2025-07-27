@@ -91,7 +91,7 @@
                             <a class="nav-link {% if request.path == logout_url %}active{% endif %}" aria-current="page" href="{% url 'account_logout' %}">Logout</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'password_change' %}">Change Password</a>
+                            <a class="nav-link" href="{% url 'bookings:reservation_new' %}">Booking</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
@@ -105,9 +105,9 @@
                 </ul>
                 <span class="navbar-text text-muted">
                     {% if user.is_authenticated %}
-                        You are logged in as <strong>{{ user.get_username }}</strong>
+                        <strong>{{ user.get_username }}</strong>
                     {% else %}
-                        midwales <span class="text-primary">holidays</span>
+                        <a class="nav-link {% if request.path == login_url %}active{% endif %}" aria-current="page" href="{% url 'account_login' %}"><strong class="text-primary"></strong>Login/Register</strong></a>
                     {% endif %}
                 </span>
             </div>
