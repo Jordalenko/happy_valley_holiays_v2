@@ -43,7 +43,7 @@ class HomePageView(TemplateView):
         context["page_obj"] = page_obj
         context["is_paginated"] = page_obj.has_other_pages()
 
-        context["lake_images"] = HeroImage.objects.all().order_by('image')
+        context["lake_images"] = HeroImage.objects.filter(image__isnull=False).exclude(image='').order_by('image')
 
         return context
 

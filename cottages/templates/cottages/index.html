@@ -61,18 +61,14 @@
             <div class="card mb-6">
               <div class="card-body">
                 <div class="image-container">
-                  {% if "placeholder" in cottage.featured_image.url %}
+                  {% if cottage.image %}
                   <img
                     class="card-img-top"
-                    src="{% static 'images/default.jpg' %}"
-                    alt="placeholder image"
-                  />
-                  {% else %}
-                  <img
-                    class="card-img-top"
-                    src="{{ cottage.featured_image.url }}"
+                    src="{{ cottage.image.url }}"
                     alt="{{ cottage.title }}"
                   />
+                  {% else %}
+                    <p>No image available for {{ cottage.name }}</p>
                   {% endif %}
                   <div class="image-flash"></div>
                 </div>
