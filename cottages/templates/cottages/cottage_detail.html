@@ -63,7 +63,7 @@
             <hr>
             <!-- Booking form -->
             <div class="text-center">
-                  <a href="{% url 'reservation_new' %}?cottage={{ cottage.id }}" class="btn btn-primary">
+                  <a href="{% url 'bookings:reservation_new' %}?cottage={{ cottage.slug }}" class="btn btn-primary">
                     Book Now!
                   </a>
             </div>
