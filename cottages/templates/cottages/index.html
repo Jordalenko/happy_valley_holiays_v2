@@ -86,9 +86,8 @@
                 </p>
                 <hr />
                 <div class="card-text text-muted h6">
-                  <a href="/rock-terrace/" class="post-link">
-                    <!-- temporary link to demonstrate booking button location -->
-                    <h2 class="card-title">Coming Soon Booking!</h2>
+                  <a href="{% url 'reservation_new' %}?cottage={{ cottage.slug }}" class="btn btn-signup">
+                    Book Now!
                   </a>
                 </div>
               </div>
@@ -108,9 +107,7 @@
         <div class="row">
           <!-- link to review detail template -->
           <h2 class="text-center">
-            <a href="{% url 'review_detail' %}" class="review-link brand"
-              >Reviews</a
-            >
+            Reviews
           </h2>
           <!-- reviews paginated by 3 -->
           {% for review in review_list %}

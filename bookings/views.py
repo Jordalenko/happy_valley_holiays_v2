@@ -30,6 +30,17 @@ class ReservationCreateView(CreateView):
             ])
         context['booked_ranges_json'] = json.dumps(booked_ranges)
         return context
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        cottage_id = self.request.GET.get("cottage")
+        if cottage_id:
+            try:
+                cottage = Cottage.objects.get(pk=cottage_id)
+                initial["cottage"] = cottage
+            except Cottage.DoesNotExist:
+                pass
+        return initial
 
     def form_valid(self, form):
         form.instance.guest = self.request.user
