@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow">
+        <div class="card-header text-center bg-primary text-white">
+          <h2 class="mb-0">Book a Cottage</h2>
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %} {% if form.errors %}
+            <div class="alert alert-danger">{{ form.errors }}</div>
+            {% endif %}
+            <div class="mb-3">
+              <label for="id_cottage" class="form-label">Cottage</label>
+              {{ form.cottage }}
+            </div>
+            <div class="mb-3">
+              <label for="id_dates" class="form-label">Dates</label>
+              <input
+                type="text"
+                id="id_dates"
+                name="dates"
+                class="form-control"
+                placeholder="Select date range"
+                autocomplete="off"
+                value="{{ form.dates.value|default_if_none:'' }}"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="id_guest_notes" class="form-label">Guest Notes</label>
+              {{ form.guest_notes }}
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-3">
+              Book Now
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block extras %} {{ block.super }}
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const bookedRanges = JSON.parse('{{ booked_ranges_json|escapejs }}');
+    flatpickr("#id_dates", {
+      mode: "range",
+      minDate: "today",
+      dateFormat: "Y-m-d",
+      allowInput: true,
+      locale: {
+        firstDayOfWeek: 1,
+      },
+      disable: bookedRanges.map(function(range) {
+        return { from: range[0], to: range[1] };
+      })
+    });
+  });
+</script>
+{% endblock %}

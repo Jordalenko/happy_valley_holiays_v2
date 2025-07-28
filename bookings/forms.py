@@ -20,6 +20,9 @@ class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
         fields = ["cottage", "dates", "guest_notes"]
+        widgets = {
+            'cottage': forms.HiddenInput()
+        }
 
     def clean(self):
         cleaned = super().clean()
