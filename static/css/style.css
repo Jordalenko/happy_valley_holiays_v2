@@ -192,6 +192,12 @@ html {
 }
 
 /* Date Picker */
+/* 
+.calendar-container {
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  /* width: 100%;
+}  */
 
 /* #id_guest_notes {
   height: 33.33%;
