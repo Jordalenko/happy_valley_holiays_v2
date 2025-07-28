@@ -191,6 +191,12 @@ html {
   text-overflow: ellipsis;
 }
 
+/* Date Picker */
+
+/* #id_guest_notes {
+  height: 33.33%;
+} */
+
 /* Footer */
 
 /* #footer-map-image {
@@ -210,7 +216,7 @@ html {
 }
 
 /* Optional: you can limit the map container max-width as well */
-.footer-map-container {
+/* .footer-map-container {
   max-width: 400px;
   margin: 0 auto;
-} */
+} */ */

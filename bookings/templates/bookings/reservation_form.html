@@ -88,11 +88,41 @@
                 id="id_dates"
                 name="dates"
                 class="form-control"
-                placeholder="Select date range"
+                placeholder=""
                 autocomplete="off"
                 value="{{ form.dates.value|default_if_none:'' }}"
               />
             </div>
             <div class="mb-3">
-              <label for="id_guest_notes" class="form-label
+              <label for="id_guest_notes" class="form-label">Guest Notes</label>
+              {{ form.guest_notes }}
+            </div>
+            <button type="submit" class="btn btn-primary">Book Now</button>
+
+{% block extrascript %}
+  <script>
+  function getMonthDisplayCount() {
+    return window.innerWidth >= 768 ? 2 : 1;
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const fp = flatpickr("#id_dates", {
+      mode: "range",
+      dateFormat: "Y-m-d",
+      inline: true,
+      minDate: "today",
+      showMonths: getMonthDisplayCount(),
+      disable: {{ booked_ranges_json|safe }}
+    });
+
+    // Optional: Recalculate on window resize
+    window.addEventListener("resize", function () {
+      const newCount = getMonthDisplayCount();
+      if (fp.config.showMonths !== newCount) {
+        fp.set("showMonths", newCount);
+      }
+    });
+  });
+</script>
+{% endblock %}
 {% endblock %}

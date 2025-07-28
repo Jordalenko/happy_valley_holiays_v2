@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.urls import reverse_lazy
@@ -30,7 +31,7 @@ class ReservationCreateView(CreateView):
             ])
         context['booked_ranges_json'] = json.dumps(booked_ranges)
         return context
-    
+
     def get_initial(self):
         initial = super().get_initial()
         cottage_slug = self.request.GET.get("cottage")
@@ -49,3 +50,13 @@ class ReservationCreateView(CreateView):
         form.instance.check_in_date = cleaned.get('check_in_date')
         form.instance.check_out_date = cleaned.get('check_out_date')
         return super().form_valid(form)
+
+def booked_dates_json(request, cottage_slug):
+        reservations = Reservation.objects.filter(cottage__slug=cottage_slug)
+        dates = []
+        for r in reservations:
+            current = r.check_in_date
+            while current < r.check_out_date:
+                dates.append(current.strftime('%Y-%m-%d'))
+                current += timedelta(days=1)
+        return JsonResponse(dates, safe=False)

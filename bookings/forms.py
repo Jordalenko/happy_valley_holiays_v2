@@ -9,7 +9,8 @@ class FlatpickrRangeInput(forms.TextInput):
         kwargs.setdefault("attrs", {}).update({
             "placeholder": "Check‑in → Check‑out",
             "class": "form-control",
-            "data-input": "", 
+            "data-input": "",
+            "data-inline": "true",  # This makes the calendar show inline
         })
         super().__init__(**kwargs)
 

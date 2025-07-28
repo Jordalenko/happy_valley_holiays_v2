@@ -1,3 +1,18 @@
 <input type="{{ widget.type }}" name="{{ widget.name }}" {% include
 "django/forms/widgets/attrs.html" %} value="{{ widget.value|default_if_none:''
 }}">
+
+<!-- templates/widgets/flatpickr_range.html -->
+<div id="flatpickr-container">
+  <input type="{{ widget.type }}" name="{{ widget.name }}"
+         {% include "django/forms/widgets/attrs.html" %}
+         data-range="true" />
+</div>
+
+<style>
+  @media (min-width: 768px) {
+    .flatpickr-calendar.inline {
+      width: auto !important;
+    }
+  }
+</style>
