@@ -66,24 +66,17 @@
     </div>
 </div>
 <hr>
-<div class="col-md-8 col-lg-6">
-      <div class="card shadow calendar-container">
-        <!-- <div class="card-header text-center bg-primary text-white">
-          <h2 class="mb-0">Book a Cottage</h2>
-        </div> -->
-        <div class="card-body">
-          <form method="post">
-            {% csrf_token %} {% if form.errors %}
-            <div class="alert alert-danger">{{ form.errors }}</div>
-            {% endif %}
-            <!-- <div class="mb-3"> -->
-              <!-- <label for="id_cottage" class="form-label">Cottage</label> -->
-              <!-- Hidden cottage input field -->
-              {{ form.cottage }}
-            <!-- </div> -->
-            <div class="mb-3">
-              <!-- <label for="id_dates" class="form-label">Dates</label> -->
-              <input
+<div class="col-md-8 col-lg-6 mx-auto">
+  <div class="card">
+    <div class="card-body">
+        <form method="post" style="display: flex; flex-direction: column; align-items: center;">
+        {% csrf_token %} {% if form.errors %}
+          <div class="alert alert-danger">{{ form.errors }}</div>
+          {% endif %}
+          {{ form.cottage }}
+          <div class="mb-3">
+            <label for="id_dates" class="form-label">Date Range</label>
+            <input
                 type="text"
                 id="id_dates"
                 name="dates"
@@ -92,12 +85,24 @@
                 autocomplete="off"
                 value="{{ form.dates.value|default_if_none:'' }}"
               />
-            </div>
-            <div class="mb-3">
+          </div>
+          <div class="container">
+            <div  style="display: flex; justify-content: center; align-items: center;">
               <label for="id_guest_notes" class="form-label">Guest Notes</label>
-              {{ form.guest_notes }}
             </div>
+              <textarea id="id_guest_notes" name="guest_notes" class="form-control"
+                        rows="4" placeholder="Any special requests or notes for the host">
+                        {{ form.guest_notes.value|default_if_none:'' }}
+              </textarea>
+          </div>
+          <div class="container mt-2" style="display: flex; justify-content: center; align-items: center;">
             <button type="submit" class="btn btn-primary">Book Now</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% block extrascript %}
   <script>
