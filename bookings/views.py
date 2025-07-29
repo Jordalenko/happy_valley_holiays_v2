@@ -17,19 +17,33 @@ class ReservationCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # Get all booked date ranges for the selected cottage (or all if none selected)
-        cottage_id = self.request.GET.get('cottage')
-        if cottage_id:
-            reservations = Reservation.objects.filter(cottage_id=cottage_id)
+        cottage_slug = self.request.GET.get("cottage")
+
+        # Fetch the selected cottage
+        cottage = None
+        if cottage_slug:
+            try:
+                cottage = Cottage.objects.get(slug=cottage_slug)
+            except Cottage.DoesNotExist:
+                pass
+
+        # Set the context needed by the dropdown and carousel
+        context["cottage"] = cottage
+        context["cottages"] = Cottage.objects.all()
+        context["images"] = cottage.images.all() if cottage else []
+
+        # Handle booked date ranges (already implemented)
+        if cottage:
+            reservations = Reservation.objects.filter(cottage=cottage)
         else:
             reservations = Reservation.objects.all()
-        booked_ranges = []
-        for r in reservations:
-            booked_ranges.append([
-                r.check_in_date.strftime('%Y-%m-%d'),
-                r.check_out_date.strftime('%Y-%m-%d')
-            ])
-        context['booked_ranges_json'] = json.dumps(booked_ranges)
+
+        booked_ranges = [
+            [r.check_in_date.strftime('%Y-%m-%d'), r.check_out_date.strftime('%Y-%m-%d')]
+            for r in reservations
+        ]
+        context["booked_ranges_json"] = json.dumps(booked_ranges)
+
         return context
 
     def get_initial(self):
