@@ -31,34 +31,6 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
-    <style>
-        .review-link {
-            font-size: 1.2em;
-            color: #445261;
-            text-decoration: none;
-        }
-
-        .review-link:hover {
-            color: #E84610;
-            text-decoration: none;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        .truncate-one-line {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .bg-error { background-color: #dc3545; }  /* red */
-        .bg-success { background-color: #28a745; } /* green */
-        .bg-warning { background-color: #ffc107; } /* yellow */
-        .bg-info { background-color: #0dcaf0; } /* blue */
-        </style>
     
 </head>
 
@@ -138,8 +110,12 @@
     <hr>
     <div class="container">
       <div class="row">
-        <div class="col-md-6 text-center footer-map-container">
-          <img src="{% static 'images/llani_map_detail.png' %}" style="width: 90%; height: 90%; object-fit: cover;" usemap="#footer-map" alt="Clickable Map" />
+        <div class="col-md-6 text-center footer-map-container" style="width: 90%; height: 90%; object-fit: cover;">
+            <h3 class="text-center">Find us:</h3>
+            <p class="text-center">
+                Click to view our locations
+            </p>
+          <img src="{% static 'images/llani_map_detail.png' %}" usemap="#footer-map" alt="Clickable Map" />
 
             <map name="footer-map">
                 <area 
